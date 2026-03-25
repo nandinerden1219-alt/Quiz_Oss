@@ -3,650 +3,2434 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz</title>
+    <title>Quiz Platform</title>
     <style>
       * {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
 
       :root {
-        --bg1: #fff1f7;
-        --bg2: #f7f0ff;
-        --card: rgba(255, 255, 255, 0.72);
-        --line: rgba(255, 255, 255, 0.85);
-        --text: #4b3558;
-        --muted: #866e93;
-        --accent1: #ff8fc7;
-        --accent2: #b68cff;
-        --accent3: #ffb5dc;
-        --shadow: 0 18px 45px rgba(190, 137, 188, 0.18);
+        --bg1: #0b1020;
+        --bg2: #151b35;
+        --card: rgba(255, 255, 255, 0.07);
+        --card2: rgba(255, 255, 255, 0.11);
+        --line: rgba(255, 255, 255, 0.13);
+        --line2: rgba(255, 255, 255, 0.22);
+        --text: #f0f4ff;
+        --muted: #8b96c8;
+        --a1: #8b5cf6;
+        --a2: #ec4899;
+        --a3: #06b6d4;
+        --ok: #22c55e;
+        --err: #fb7185;
+        --warn: #f59e0b;
+        --r: 14px;
+        --r2: 22px;
+        --r3: 32px;
+        --sh: 0 20px 60px rgba(0, 0, 0, 0.4);
       }
 
       body {
-        margin: 0;
-        min-height: 100vh;
-        font-family: Arial, sans-serif;
+        font-family: Inter, Arial, sans-serif;
         color: var(--text);
         background:
           radial-gradient(
-            circle at top left,
-            rgba(255, 182, 217, 0.9),
-            transparent 30%
+            circle at 15% 15%,
+            rgba(139, 92, 246, 0.22),
+            transparent 35%
           ),
           radial-gradient(
-            circle at top right,
-            rgba(206, 182, 255, 0.8),
-            transparent 28%
+            circle at 85% 10%,
+            rgba(236, 72, 153, 0.18),
+            transparent 30%
           ),
           linear-gradient(135deg, var(--bg1), var(--bg2));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 24px;
+        min-height: 100vh;
       }
 
-      .quiz-app {
-        width: min(760px, 100%);
+      .hidden {
+        display: none !important;
+      }
+      .flex {
+        display: flex;
+      }
+      .gap8 {
+        gap: 8px;
+      }
+      .gap12 {
+        gap: 12px;
+      }
+      .gap16 {
+        gap: 16px;
+      }
+      .col {
+        flex-direction: column;
+      }
+      .center {
+        align-items: center;
+      }
+      .jcenter {
+        justify-content: center;
+      }
+      .wrap {
+        flex-wrap: wrap;
+      }
+      .bold {
+        font-weight: 700;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .small {
+        font-size: 13px;
+      }
+      .tiny {
+        font-size: 11px;
       }
 
       .card {
         background: var(--card);
         border: 1px solid var(--line);
-        border-radius: 32px;
+        border-radius: var(--r3);
         padding: 28px;
-        box-shadow: var(--shadow);
-        backdrop-filter: blur(18px);
+        box-shadow: var(--sh);
+        backdrop-filter: blur(20px);
+      }
+      .card-sm {
+        border-radius: var(--r2);
+        padding: 18px;
+      }
+      .card-xs {
+        border-radius: var(--r);
+        padding: 12px 14px;
       }
 
-      .top-badge {
+      .badge {
         display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px 14px;
+        gap: 6px;
+        padding: 6px 12px;
         border-radius: 999px;
-        background: rgba(255, 255, 255, 0.75);
+        font-size: 13px;
+        font-weight: 600;
+        background: var(--card2);
+        border: 1px solid var(--line);
         color: var(--muted);
-        font-size: 14px;
-        margin-bottom: 14px;
       }
 
-      h1 {
-        margin: 0;
-        font-size: clamp(34px, 6vw, 58px);
-        line-height: 1.05;
-      }
-
-      .subtitle {
-        margin: 14px 0 0;
-        color: var(--muted);
-        line-height: 1.8;
-        font-size: 17px;
-      }
-
-      .progress-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 14px;
-        margin: 24px 0 18px;
-      }
-
-      .progress-label {
-        font-size: 14px;
-        color: var(--muted);
-        font-weight: 700;
-      }
-
-      .progress-track {
+      input[type="text"],
+      input[type="number"],
+      select,
+      textarea {
         width: 100%;
-        height: 12px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.8);
-        overflow: hidden;
+        padding: 13px 16px;
+        border-radius: var(--r);
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.06);
+        color: var(--text);
+        font-size: 15px;
+        outline: none;
+        transition: 0.2s;
+        font-family: inherit;
       }
-
-      .progress-fill {
-        height: 100%;
-        width: 10%;
-        border-radius: 999px;
-        background: linear-gradient(90deg, var(--accent1), var(--accent2));
-        transition: width 0.3s ease;
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--a1);
       }
-
-      .question-card {
-        background: rgba(255, 255, 255, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.95);
-        border-radius: 26px;
-        padding: 22px;
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--muted);
       }
-
-      .question-number {
-        display: inline-block;
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: linear-gradient(135deg, var(--accent3), #ffffff);
+      select option {
+        background: #1a2040;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+      .input-label {
         font-size: 13px;
         color: var(--muted);
-        font-weight: 700;
-        margin-bottom: 12px;
-      }
-
-      .question-text {
-        margin: 0 0 18px;
-        font-size: 24px;
-        line-height: 1.45;
-      }
-
-      .options {
-        display: grid;
-        gap: 12px;
-      }
-
-      .option {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 14px 16px;
-        border-radius: 18px;
-        border: 2px solid transparent;
-        background: rgba(255, 255, 255, 0.85);
-        cursor: pointer;
-        transition: 0.2s ease;
-      }
-
-      .option:hover {
-        transform: translateY(-2px);
-        border-color: rgba(255, 143, 199, 0.45);
-      }
-
-      .option.selected {
-        border-color: var(--accent1);
-        background: rgba(255, 232, 243, 0.95);
-      }
-
-      .option-bullet {
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        border: 2px solid #e0bfd5;
-        flex-shrink: 0;
-        display: grid;
-        place-items: center;
-      }
-
-      .option.selected .option-bullet::after {
-        content: "";
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--accent1), var(--accent2));
-      }
-
-      .option span:last-child {
-        line-height: 1.5;
-      }
-
-      .button-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        margin-top: 22px;
+        margin-bottom: 6px;
+        font-weight: 600;
       }
 
       button {
         border: none;
-        border-radius: 18px;
-        padding: 14px 18px;
+        cursor: pointer;
+        border-radius: var(--r);
+        padding: 13px 20px;
         font-size: 15px;
         font-weight: 700;
-        cursor: pointer;
-        transition: 0.2s ease;
+        font-family: inherit;
+        transition: 0.18s;
       }
-
-      button:hover {
+      button:hover:not(:disabled) {
         transform: translateY(-2px);
       }
-
-      .primary-btn {
-        color: white;
-        background: linear-gradient(135deg, var(--accent1), var(--accent2));
+      button:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        transform: none !important;
       }
-
-      .secondary-btn {
+      .btn-primary {
+        background: linear-gradient(135deg, var(--a1), var(--a2));
+        color: #fff;
+      }
+      .btn-secondary {
+        background: rgba(255, 255, 255, 0.08);
         color: var(--text);
-        background: rgba(255, 255, 255, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.95);
+        border: 1px solid var(--line);
+      }
+      .btn-danger {
+        background: rgba(251, 113, 133, 0.15);
+        color: var(--err);
+        border: 1px solid rgba(251, 113, 133, 0.3);
+      }
+      .btn-sm {
+        padding: 9px 14px;
+        font-size: 13px;
+        border-radius: 10px;
+      }
+      .btn-full {
+        width: 100%;
       }
 
-      .hidden {
-        display: none;
+      .msg {
+        padding: 12px 16px;
+        border-radius: var(--r);
+        font-size: 14px;
+        line-height: 1.6;
+        margin-top: 12px;
+      }
+      .msg.ok {
+        background: rgba(34, 197, 94, 0.12);
+        color: #bbf7d0;
+        border: 1px solid rgba(34, 197, 94, 0.25);
+      }
+      .msg.err {
+        background: rgba(251, 113, 133, 0.12);
+        color: #fecdd3;
+        border: 1px solid rgba(251, 113, 133, 0.25);
+      }
+      .msg.info {
+        background: rgba(6, 182, 212, 0.12);
+        color: #a5f3fc;
+        border: 1px solid rgba(6, 182, 212, 0.25);
+      }
+      .msg.warn {
+        background: rgba(245, 158, 11, 0.12);
+        color: #fde68a;
+        border: 1px solid rgba(245, 158, 11, 0.25);
       }
 
-      .result-card,
-      .intro-card,
-      .notice-card {
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--err);
+      }
+      .dot.live {
+        background: var(--ok);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.4;
+        }
+      }
+
+      /* LANDING */
+      #landingView {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      #landingView .inner {
+        width: min(520px, 100%);
+      }
+      #landingView h1 {
+        font-size: clamp(36px, 6vw, 60px);
+        line-height: 1;
+        margin: 16px 0 10px;
+      }
+      #landingView .sub {
+        color: var(--muted);
+        line-height: 1.8;
+        font-size: 16px;
+        margin-bottom: 28px;
+      }
+      .tab-row {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 20px;
+      }
+      .tab {
+        flex: 1;
+        padding: 11px;
+        border-radius: var(--r);
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.04);
+        color: var(--muted);
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.18s;
+        text-align: center;
+      }
+      .tab.active {
+        background: linear-gradient(135deg, var(--a1), var(--a2));
+        color: #fff;
+        border-color: transparent;
+      }
+      .form-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      /* LOBBY */
+      #lobbyView {
+        min-height: 100vh;
+        padding: 24px;
+      }
+      .lobby-wrap {
+        max-width: 1100px;
+        margin: 0 auto;
+      }
+      .code-box {
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: 6px;
+        background: linear-gradient(135deg, var(--a1), var(--a2));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .lobby-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .player-chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: var(--r);
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid var(--line);
+        font-size: 14px;
+      }
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--a1), var(--a2));
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 13px;
+        flex-shrink: 0;
+      }
+      .q-editor {
+        border: 1px solid var(--line);
+        border-radius: var(--r2);
+        padding: 16px;
+        margin-bottom: 16px;
+      }
+      .opt-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 8px;
+      }
+      .opt-row input {
+        flex: 1;
+      }
+      .correct-toggle {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid var(--line);
+        background: transparent;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: 0.15s;
+        display: grid;
+        place-items: center;
+        padding: 0;
+        font-size: 12px;
+      }
+      .correct-toggle.on {
+        background: var(--ok);
+        border-color: var(--ok);
+        color: #fff;
+      }
+
+      /* WAIT */
+      #waitView {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      #waitView .inner {
+        width: min(460px, 100%);
         text-align: center;
       }
 
-      .emoji {
-        font-size: 56px;
+      /* QUIZ HOST */
+      #quizHostView {
+        min-height: 100vh;
+        padding: 20px;
+      }
+      .quiz-host-wrap {
+        max-width: 1300px;
+        margin: 0 auto;
+      }
+      .quiz-host-grid {
+        display: grid;
+        grid-template-columns: 1fr 420px;
+        gap: 20px;
+        align-items: start;
+      }
+      .q-panel {
+        position: sticky;
+        top: 20px;
+      }
+      .q-panel h2 {
+        font-size: clamp(18px, 2.5vw, 26px);
+        line-height: 1.4;
+        margin: 16px 0 20px;
+      }
+      .opt-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .opt-card {
+        background: rgba(255, 255, 255, 0.07);
+        border: 1.5px solid var(--line);
+        border-radius: var(--r2);
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 15px;
+        transition: 0.2s;
+      }
+      .opt-card.correct-opt {
+        border-color: var(--ok);
+        background: rgba(34, 197, 94, 0.08);
+      }
+      .opt-letter {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        background: rgba(255, 255, 255, 0.1);
+        display: grid;
+        place-items: center;
+        font-weight: 700;
+        font-size: 14px;
+      }
+      .timer-ring-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+      .timer-ring {
+        position: relative;
+        width: 72px;
+        height: 72px;
+        flex-shrink: 0;
+      }
+      .timer-ring svg {
+        transform: rotate(-90deg);
+      }
+      .timer-ring .num {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-size: 22px;
+        font-weight: 800;
+      }
+      .progress-bar-wrap {
+        flex: 1;
+        height: 8px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.1);
+        overflow: hidden;
+      }
+      .progress-bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--a1), var(--a2));
+        transition: width 0.4s linear;
+      }
+      .stats-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .stats-scroll {
+        max-height: calc(100vh - 180px);
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+      .stats-scroll::-webkit-scrollbar {
+        width: 4px;
+      }
+      .stats-scroll::-webkit-scrollbar-thumb {
+        background: var(--line2);
+        border-radius: 4px;
+      }
+      .stat-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: var(--r);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--line);
+        font-size: 13px;
+        transition: background 0.3s;
+      }
+      .stat-row.answered {
+        background: rgba(34, 197, 94, 0.07);
+        border-color: rgba(34, 197, 94, 0.2);
+      }
+      .stat-row .sname {
+        flex: 1;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .stat-row .stime {
+        color: var(--a3);
+        font-weight: 700;
+        font-size: 12px;
+        white-space: nowrap;
+      }
+      .stat-row .smark {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        flex-shrink: 0;
+      }
+      .smark.ok {
+        background: rgba(34, 197, 94, 0.2);
+        color: var(--ok);
+      }
+      .smark.err {
+        background: rgba(251, 113, 133, 0.2);
+        color: var(--err);
+      }
+      .smark.wait {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--muted);
+      }
+      .q-stat-card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        padding: 10px 12px;
+        margin-bottom: 6px;
+      }
+      .q-stat-card .q-label {
+        font-size: 12px;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .mini-bar {
+        height: 6px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+        margin-top: 4px;
+      }
+      .mini-bar-fill {
+        height: 100%;
+        border-radius: 999px;
+        background: linear-gradient(90deg, var(--a1), var(--a2));
+        transition: width 0.5s;
+      }
+
+      /* QUIZ PARTICIPANT */
+      #quizParView {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+      #quizParView .inner {
+        width: min(680px, 100%);
+      }
+      .par-q-text {
+        font-size: clamp(18px, 3vw, 26px);
+        font-weight: 700;
+        line-height: 1.45;
+        margin: 16px 0 22px;
+      }
+      .par-opt {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 18px;
+        border-radius: var(--r2);
+        border: 2px solid var(--line);
+        background: rgba(255, 255, 255, 0.06);
+        cursor: pointer;
+        transition: 0.2s;
+        font-size: 15px;
         margin-bottom: 10px;
       }
-
-      .result-title {
-        margin: 0;
-        font-size: clamp(30px, 5vw, 46px);
+      .par-opt:hover:not(.locked) {
+        transform: translateY(-2px);
+        border-color: rgba(139, 92, 246, 0.5);
       }
-
-      .result-text {
-        margin: 14px auto 0;
-        max-width: 560px;
-        color: var(--muted);
-        line-height: 1.8;
-        font-size: 17px;
+      .par-opt.chosen {
+        border-color: var(--a1);
+        background: rgba(139, 92, 246, 0.12);
       }
-
-      .score-box {
-        margin: 24px auto 0;
-        width: min(280px, 100%);
-        padding: 22px;
-        border-radius: 24px;
-        background: rgba(255, 255, 255, 0.82);
-        border: 1px solid rgba(255, 255, 255, 0.95);
+      .par-opt.reveal-ok {
+        border-color: var(--ok);
+        background: rgba(34, 197, 94, 0.1);
       }
-
-      .score-number {
-        font-size: 52px;
-        font-weight: 800;
-        line-height: 1;
+      .par-opt.reveal-err {
+        border-color: var(--err);
+        background: rgba(251, 113, 133, 0.1);
       }
-
-      .score-label {
-        margin-top: 8px;
-        color: var(--muted);
+      .par-opt.locked {
+        cursor: default;
       }
-
-      .cta-box {
-        margin-top: 22px;
-        padding: 20px;
-        border-radius: 22px;
-        background: linear-gradient(
-          135deg,
-          rgba(255, 238, 247, 0.95),
-          rgba(243, 236, 255, 0.95)
-        );
-        border: 1px solid rgba(255, 255, 255, 0.95);
-      }
-
-      .cta-box h3 {
-        margin: 0 0 10px;
-        font-size: 22px;
-      }
-
-      .cta-box p {
-        margin: 0;
-        line-height: 1.8;
-        color: var(--text);
-      }
-
-      .fb-link {
-        display: inline-block;
-        margin-top: 14px;
-        padding: 13px 18px;
-        border-radius: 16px;
-        color: white;
-        text-decoration: none;
+      .score-chip {
+        padding: 8px 16px;
+        border-radius: 999px;
         font-weight: 700;
-        background: linear-gradient(135deg, #ff8fc7, #a477ff);
+        font-size: 14px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--line);
       }
 
-      @media (max-width: 640px) {
-        body {
-          padding: 14px;
-        }
+      /* RESULTS */
+      #resultsView {
+        min-height: 100vh;
+        padding: 24px;
+      }
+      .results-wrap {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+      .podium {
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 12px;
+        margin: 28px 0;
+      }
+      .podium-item {
+        text-align: center;
+        flex: 1;
+        max-width: 200px;
+      }
+      .podium-bar {
+        border-radius: var(--r2) var(--r2) 0 0;
+        background: linear-gradient(
+          180deg,
+          rgba(139, 92, 246, 0.3),
+          rgba(236, 72, 153, 0.15)
+        );
+        border: 1px solid var(--line2);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 12px;
+      }
+      .podium-name {
+        font-size: 13px;
+        font-weight: 700;
+        margin-top: 8px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .podium-score {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .leaderboard-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 14px 16px;
+        border-radius: var(--r2);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--line);
+        margin-bottom: 8px;
+        transition: 0.2s;
+      }
+      .leaderboard-row.winner {
+        border-color: rgba(245, 158, 11, 0.4);
+        background: rgba(245, 158, 11, 0.06);
+      }
+      .lb-rank {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        font-size: 15px;
+        flex-shrink: 0;
+      }
+      .lb-rank.r1 {
+        background: linear-gradient(135deg, #fbbf24, #f59e0b);
+        color: #431407;
+      }
+      .lb-rank.r2 {
+        background: linear-gradient(135deg, #94a3b8, #64748b);
+        color: #0f172a;
+      }
+      .lb-rank.r3 {
+        background: linear-gradient(135deg, #cd7f32, #a0522d);
+        color: #fff;
+      }
+      .lb-rank.rn {
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--muted);
+      }
+      .lb-name {
+        flex: 1;
+        font-weight: 700;
+      }
+      .lb-meta {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .lb-score {
+        font-size: 22px;
+        font-weight: 800;
+      }
+      .lb-time {
+        font-size: 12px;
+        color: var(--a3);
+        text-align: right;
+      }
+      .winner-tag {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: rgba(245, 158, 11, 0.18);
+        color: #fde68a;
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        white-space: nowrap;
+      }
 
+      /* PRIZES */
+      #prizeView {
+        min-height: 100vh;
+        padding: 24px;
+      }
+      .prize-wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      .prize-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 12px;
+        margin: 24px 0;
+        text-align: center;
+      }
+      .prize-card {
+        background: rgba(255, 255, 255, 0.07);
+        border: 2px solid var(--line);
+        border-radius: var(--r2);
+        padding: 18px 10px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+      .prize-card:hover:not(.taken):not(.locked) {
+        transform: translateY(-3px);
+        border-color: rgba(139, 92, 246, 0.5);
+      }
+      .prize-card.selected {
+        border-color: var(--a1);
+        background: rgba(139, 92, 246, 0.12);
+      }
+      .prize-card.taken {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+      .prize-card.locked {
+        cursor: not-allowed;
+      }
+      .prize-emoji {
+        font-size: 34px;
+        margin-bottom: 8px;
+      }
+      .prize-name {
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .prize-status {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 4px;
+      }
+      .your-turn-banner {
+        padding: 16px 20px;
+        border-radius: var(--r2);
+        background: rgba(34, 197, 94, 0.1);
+        border: 1px solid rgba(34, 197, 94, 0.3);
+        color: #bbf7d0;
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .wait-banner {
+        padding: 16px 20px;
+        border-radius: var(--r2);
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        color: #fde68a;
+        font-size: 15px;
+        margin-bottom: 20px;
+      }
+      .claimed-banner {
+        margin-top: 24px;
+        padding: 20px;
+        border-radius: var(--r2);
+        background: rgba(139, 92, 246, 0.1);
+        border: 1px solid rgba(139, 92, 246, 0.3);
+      }
+
+      @media (max-width: 900px) {
+        .quiz-host-grid {
+          grid-template-columns: 1fr;
+        }
+        .q-panel {
+          position: static;
+        }
+        .lobby-grid {
+          grid-template-columns: 1fr;
+        }
+        .opt-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 600px) {
         .card {
           padding: 18px;
-          border-radius: 24px;
+          border-radius: var(--r2);
         }
+        .prize-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .podium {
+          gap: 6px;
+        }
+      }
 
-        .question-text {
-          font-size: 21px;
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
         }
-
-        .button-row {
-          flex-direction: column;
+        to {
+          opacity: 1;
+          transform: none;
         }
-
-        button,
-        .fb-link {
-          width: 100%;
-          text-align: center;
+      }
+      .fade-up {
+        animation: fadeUp 0.35s ease forwards;
+      }
+      @keyframes pop {
+        0% {
+          transform: scale(0.85);
         }
+        60% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+      .pop {
+        animation: pop 0.3s ease forwards;
       }
     </style>
   </head>
   <body>
-    <div class="quiz-app">
-      <div class="card intro-card" id="introView">
-        <div class="top-badge">Ddish Team</div>
-        <div class="emoji">🌸</div>
-        <h1>Quiz Time</h1>
-        <p class="subtitle">
-          Та асуултад 8-аас дээш зөв хариулан бидний зүгээс өгч буй бяцхан
-          бэлгийн эзэн болоорой.
-        </p>
-        <div class="button-row" style="justify-content: center">
-          <button class="primary-btn" id="startBtn">Эхлэх</button>
+    <!-- LANDING -->
+    <div id="landingView" class="hidden">
+      <div class="inner">
+        <div class="card fade-up">
+          <div class="badge"><span class="dot live"></span> Live Quiz</div>
+          <h1>Quiz<br />Platform</h1>
+          <p class="sub">Lobby үүсгэж найзуудаа урь эсвэл код оруулан нэгд.</p>
+
+          <div class="tab-row">
+            <div class="tab active" id="tabJoin" onclick="switchTab('join')">
+              Нэгдэх
+            </div>
+            <div class="tab" id="tabHost" onclick="switchTab('host')">
+              Хост болох
+            </div>
+          </div>
+
+          <div id="joinForm" class="form-stack">
+            <div>
+              <div class="input-label">Нэр</div>
+              <input id="joinName" type="text" placeholder="Нэрээ оруулна уу" />
+            </div>
+            <div>
+              <div class="input-label">Lobby код</div>
+              <input
+                id="joinCode"
+                type="text"
+                placeholder="6 оронтой код"
+                maxlength="6"
+                style="text-transform: uppercase; font-size: 18px"
+              />
+            </div>
+            <button class="btn-primary btn-full" onclick="joinLobby()">
+              Нэгдэх →
+            </button>
+          </div>
+
+          <div id="hostForm" class="form-stack hidden">
+            <div>
+              <div class="input-label">Нэр (хост)</div>
+              <input id="hostName" type="text" placeholder="Нэрээ оруулна уу" />
+            </div>
+            <button class="btn-primary btn-full" onclick="createLobby()">
+              Lobby үүсгэх →
+            </button>
+          </div>
+
+          <div id="landingMsg"></div>
         </div>
       </div>
+    </div>
 
-      <div class="card notice-card hidden" id="noticeView">
-        <div class="emoji">🎁</div>
-        <h2 class="result-title">Анхаараарай</h2>
-        <p class="result-text">Эхний 10 хүн л бэлэг авах боломжтой шүү.</p>
-        <div class="button-row" style="justify-content: center">
-          <button class="primary-btn" id="noticeOkBtn">Ойлголоо.</button>
-        </div>
-      </div>
-
-      <div class="card hidden" id="quizView">
-        <div class="top-badge">Ddish Team</div>
-        <h1>Quiz Time</h1>
-        <p class="subtitle">
-          Асуултууд нэг нэгээрээ гарч ирнэ. Эцэст нь чиний хэдэн зөв хариулсныг
-          харуулна.
-        </p>
-
-        <div class="progress-row">
-          <div class="progress-label" id="progressText">1 / 10</div>
-          <div class="progress-track">
-            <div class="progress-fill" id="progressFill"></div>
+    <!-- LOBBY (host) -->
+    <div id="lobbyView" class="hidden">
+      <div class="lobby-wrap">
+        <div
+          style="
+            padding-top: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+          "
+        >
+          <div>
+            <div
+              class="tiny muted bold"
+              style="letter-spacing: 2px; margin-bottom: 4px"
+            >
+              LOBBY КОД
+            </div>
+            <div class="code-box" id="lobbyCodeDisplay">------</div>
+          </div>
+          <div class="badge">
+            <span class="dot live"></span>
+            <span id="lobbyPlayerCount">0</span> тоглогч
+          </div>
+          <div
+            style="margin-left: auto; display: flex; gap: 10px; flex-wrap: wrap"
+          >
+            <button class="btn-secondary btn-sm" onclick="copyLobbyCode()">
+              Код хуулах
+            </button>
+            <button
+              class="btn-primary"
+              id="startQuizBtn"
+              onclick="startQuiz()"
+              disabled
+            >
+              Эхлүүлэх
+            </button>
           </div>
         </div>
 
-        <div class="question-card">
-          <div class="question-number" id="questionNumber">Асуулт 1</div>
-          <h2 class="question-text" id="questionText"></h2>
-          <div class="options" id="optionsBox"></div>
-        </div>
+        <div class="lobby-grid">
+          <div class="card card-sm">
+            <div class="flex gap8 center" style="margin-bottom: 14px">
+              <span class="bold">Тоглогчид</span>
+              <span class="badge small" id="waitingCount">0 хүлээж байна</span>
+            </div>
+            <div
+              id="playersList"
+              style="display: flex; flex-direction: column; gap: 8px"
+            >
+              <div class="muted small">Тоглогчид нэгдэхийг хүлээж байна...</div>
+            </div>
+          </div>
 
-        <div class="button-row">
-          <button class="secondary-btn" id="prevBtn">Өмнөх</button>
-          <button class="primary-btn" id="nextBtn">Дараах</button>
+          <div class="card card-sm">
+            <div
+              class="flex gap8 center"
+              style="margin-bottom: 14px; flex-wrap: wrap"
+            >
+              <span class="bold">Quiz тохиргоо</span>
+              <button class="btn-secondary btn-sm" onclick="loadTemplate()">
+                Template ашиглах
+              </button>
+            </div>
+
+            <div class="form-stack" style="margin-bottom: 16px">
+              <div>
+                <div class="input-label">Асуулт бүрийн хугацаа (секунд)</div>
+                <input
+                  id="timeLimitInput"
+                  type="number"
+                  value="20"
+                  min="5"
+                  max="120"
+                />
+              </div>
+            </div>
+
+            <div id="questionsList" style="margin-bottom: 12px"></div>
+            <button
+              class="btn-secondary btn-sm btn-full"
+              onclick="addQuestion()"
+              style="margin-bottom: 8px"
+            >
+              + Асуулт нэмэх
+            </button>
+            <div id="lobbyMsg"></div>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="card result-card hidden" id="resultView">
-        <div class="emoji">💖</div>
-        <h2 class="result-title">Quiz дууслаа</h2>
-        <p class="result-text" id="resultText"></p>
+    <!-- WAIT (participant) -->
+    <div id="waitView" class="hidden">
+      <div class="inner">
+        <div class="card fade-up" style="text-align: center">
+          <div class="badge" style="margin: 0 auto 16px">
+            <span class="dot live"></span> Онлайн
+          </div>
+          <div style="font-size: 48px; margin-bottom: 12px">🎯</div>
+          <h2 style="margin-bottom: 8px">Хост эхлүүлэхийг хүлээж байна</h2>
+          <p class="muted" style="margin-bottom: 20px; line-height: 1.7">
+            Та амжилттай нэгдлээ. Хост quiz эхлүүлмэгц автоматаар шилжинэ.
+          </p>
+          <div
+            class="badge"
+            style="margin: 0 auto; font-size: 16px; padding: 12px 20px"
+          >
+            Код:
+            <strong
+              id="waitCodeDisplay"
+              style="letter-spacing: 4px; margin-left: 8px; color: var(--a1)"
+            ></strong>
+          </div>
+          <div
+            style="margin-top: 16px"
+            class="muted small"
+            id="waitPlayerCount"
+          ></div>
+        </div>
+      </div>
+    </div>
 
-        <div class="score-box">
-          <div class="score-number" id="scoreNumber">0/10</div>
-          <div class="score-label">Таны оноо</div>
+    <!-- QUIZ HOST -->
+    <div id="quizHostView" class="hidden">
+      <div class="quiz-host-wrap">
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 0;
+            flex-wrap: wrap;
+          "
+        >
+          <span class="badge"><span class="dot live"></span> Live</span>
+          <span class="bold" id="hostQuizTitle">Quiz</span>
+          <span class="muted small" id="hostQProgress"></span>
+          <div style="margin-left: auto">
+            <button class="btn-danger btn-sm" onclick="endQuizEarly()">
+              Дуусгах
+            </button>
+          </div>
         </div>
 
-        <div class="cta-box hidden" id="ctaBox">
-          <h3>Баяр хүргэе✨</h3>
-          <p>
-            Та 8-аас дээш зөв хариулсан байна. OSS All Employees page хуудсан
-            дээрх энэ постын доор screenshot хийгээд comment үлдээгээрэй.
+        <div class="quiz-host-grid">
+          <div class="q-panel">
+            <div class="card card-sm">
+              <div class="timer-ring-wrap">
+                <div class="timer-ring">
+                  <svg width="72" height="72" viewBox="0 0 72 72">
+                    <circle
+                      cx="36"
+                      cy="36"
+                      r="30"
+                      fill="none"
+                      stroke="rgba(255,255,255,.1)"
+                      stroke-width="6"
+                    />
+                    <circle
+                      id="timerArc"
+                      cx="36"
+                      cy="36"
+                      r="30"
+                      fill="none"
+                      stroke="url(#tgrad)"
+                      stroke-width="6"
+                      stroke-linecap="round"
+                      stroke-dasharray="188.5"
+                      stroke-dashoffset="0"
+                    />
+                    <defs>
+                      <linearGradient
+                        id="tgrad"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="0%"
+                      >
+                        <stop offset="0%" stop-color="#8b5cf6" />
+                        <stop offset="100%" stop-color="#ec4899" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div class="num" id="timerNum">--</div>
+                </div>
+                <div style="flex: 1">
+                  <div class="progress-bar-wrap">
+                    <div
+                      class="progress-bar-fill"
+                      id="timerBar"
+                      style="width: 100%"
+                    ></div>
+                  </div>
+                  <div
+                    class="muted tiny"
+                    style="margin-top: 6px"
+                    id="answeredCount"
+                  >
+                    0 хариуллаа
+                  </div>
+                </div>
+              </div>
+
+              <div class="badge" style="margin-bottom: 10px" id="hostQNum">
+                Асуулт 1
+              </div>
+              <h2 id="hostQText">...</h2>
+              <div class="opt-grid" id="hostOptGrid"></div>
+            </div>
+          </div>
+
+          <div class="stats-panel">
+            <div class="card card-sm">
+              <div class="bold" style="margin-bottom: 12px">Live тоглогчид</div>
+              <div class="stats-scroll" id="liveStatsList"></div>
+            </div>
+            <div class="card card-sm">
+              <div class="bold" style="margin-bottom: 10px">
+                Асуултын статистик
+              </div>
+              <div id="qStatsHistory"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUIZ PARTICIPANT -->
+    <div id="quizParView" class="hidden">
+      <div class="inner">
+        <div class="card fade-up">
+          <div
+            class="flex gap12 center jcenter"
+            style="margin-bottom: 16px; flex-wrap: wrap"
+          >
+            <div class="badge"><span class="dot live"></span> Live</div>
+            <div class="score-chip">
+              Оноо: <strong id="parScore">0</strong>/<span id="parTotal"
+                >10</span
+              >
+            </div>
+            <div class="score-chip">Q <span id="parQNum">1</span></div>
+          </div>
+
+          <div class="timer-ring-wrap">
+            <div class="timer-ring" style="width: 56px; height: 56px">
+              <svg width="56" height="56" viewBox="0 0 72 72">
+                <circle
+                  cx="36"
+                  cy="36"
+                  r="30"
+                  fill="none"
+                  stroke="rgba(255,255,255,.1)"
+                  stroke-width="6"
+                />
+                <circle
+                  id="parTimerArc"
+                  cx="36"
+                  cy="36"
+                  r="30"
+                  fill="none"
+                  stroke="url(#tgrad2)"
+                  stroke-width="6"
+                  stroke-linecap="round"
+                  stroke-dasharray="188.5"
+                  stroke-dashoffset="0"
+                />
+                <defs>
+                  <linearGradient id="tgrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#8b5cf6" />
+                    <stop offset="100%" stop-color="#ec4899" />
+                  </linearGradient>
+                </defs>
+              </svg>
+              <div class="num" id="parTimerNum" style="font-size: 16px">--</div>
+            </div>
+            <div class="progress-bar-wrap">
+              <div
+                class="progress-bar-fill"
+                id="parTimerBar"
+                style="width: 100%"
+              ></div>
+            </div>
+          </div>
+
+          <p class="par-q-text" id="parQText">...</p>
+          <div id="parOptList"></div>
+          <div id="parMsg"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="resultsView" class="hidden">
+      <div class="results-wrap">
+        <div style="padding-top: 24px; text-align: center; margin-bottom: 8px">
+          <div style="font-size: 48px">🏆</div>
+          <h1 style="margin-top: 8px">Дүн</h1>
+          <p class="muted" style="margin-top: 8px" id="resultsSubtitle"></p>
+        </div>
+
+        <div class="podium" id="podiumEl"></div>
+
+        <div class="card card-sm" style="margin-bottom: 16px">
+          <div id="leaderboardEl"></div>
+        </div>
+
+        <div
+          id="hostResultActions"
+          class="hidden"
+          style="text-align: center; margin-bottom: 24px"
+        >
+          <button class="btn-primary" onclick="goToPrizes()">
+            Шагнал олгох →
+          </button>
+        </div>
+        <div
+          id="parResultNote"
+          class="hidden"
+          style="text-align: center; margin-bottom: 24px"
+        >
+          <div class="msg info">
+            Хост шагнал олгох шатыг удахгүй эхлүүлнэ...
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRIZES -->
+    <div id="prizeView" class="hidden">
+      <div class="prize-wrap">
+        <div style="padding-top: 24px; margin-bottom: 8px">
+          <div style="font-size: 48px; text-align: center">🎁</div>
+          <h1 style="text-align: center; margin-top: 8px">Шагнал</h1>
+          <p class="muted" style="text-align: center; margin-top: 8px">
+            8+ оноотой тоглогчид дарааллаар сонгоно
+          </p>
+        </div>
+
+        <div id="prizeStatusBanner" style="margin: 16px 0"></div>
+        <div class="prize-grid" id="prizeGrid"></div>
+        <div style="text-align: center; margin-bottom: 24px">
+          <button
+            class="btn-primary hidden"
+            id="confirmPrizeBtn"
+            onclick="confirmPrize()"
+          >
+            Сонгох ✓
+          </button>
+        </div>
+        <div
+          id="claimedBox"
+          class="hidden claimed-banner"
+          style="text-align: center"
+        >
+          <div style="font-size: 40px" id="claimedEmoji"></div>
+          <h3 style="margin-top: 8px" id="claimedName"></h3>
+          <p class="muted small" style="margin-top: 6px">
+            Таны шагнал хадгалагдлаа!
           </p>
           <a
-            class="fb-link"
             href="https://www.facebook.com/"
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
+            style="
+              display: inline-block;
+              margin-top: 14px;
+              padding: 12px 20px;
+              border-radius: var(--r);
+              background: linear-gradient(135deg, var(--a1), var(--a2));
+              color: #fff;
+              text-decoration: none;
+              font-weight: 700;
+            "
           >
             Facebook post руу орох
           </a>
         </div>
 
-        <div class="cta-box hidden" id="retryBox">
-          <h3>Дахин оролдоод үзээрэй</h3>
-          <p>Та 8-аас доош хариулсан байна. Та дахин оролдоод үзээрэй.</p>
-        </div>
-
-        <div
-          class="button-row"
-          style="justify-content: center; margin-top: 22px"
-        >
-          <button class="secondary-btn" id="restartBtn">Дахин эхлэх</button>
+        <div id="winnerQueue" class="card card-sm" style="margin-bottom: 24px">
+          <div class="bold" style="margin-bottom: 10px">Winner дараалал</div>
+          <div id="winnerQueueList"></div>
         </div>
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script>
-      const questions = [
+      const SB_URL = "https://xkztpyvywqajxbfbgpkb.supabase.co";
+      const SB_KEY =
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrenRweXZ5d3FhanhiZmJncGtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ0MjAyMzYsImV4cCI6MjA4OTk5NjIzNn0.f7MBL6rMb4gqhJAAiX2UWwd1koMFmaNKpzfvWAKuDtU";
+
+      let sb = window.supabase.createClient(SB_URL, SB_KEY);
+
+      let state = {
+        role: null,
+        lobbyCode: null,
+        myId: null,
+        myName: null,
+        isHost: false,
+        lobby: null,
+        participants: [],
+        questions: [],
+        answers: [],
+        currentQ: 0,
+        timeLimit: 20,
+        timerInterval: null,
+        timerSec: 0,
+        timerStart: 0,
+        selectedOpt: null,
+        submitted: false,
+        score: 0,
+        channels: [],
+        prizes: [],
+        myPrize: null,
+        pickedPrize: null,
+      };
+
+      const PRIZES = [
+        { emoji: "🧼", name: "Саван" },
+        { emoji: "☕", name: "Аяга" },
+        { emoji: "🕯️", name: "Үнэртэй лаа" },
+        { emoji: "📓", name: "Notebook" },
+        { emoji: "🖊️", name: "Pen set" },
+        { emoji: "👜", name: "Tote bag" },
+        { emoji: "🔑", name: "Keychain" },
+        { emoji: "🥤", name: "Cup holder" },
+        { emoji: "🎨", name: "Sticker pack" },
+        { emoji: "🎁", name: "Mini gift box" },
+      ];
+
+      const TEMPLATE_QUESTIONS = [
         {
-          text: "OSS гэж юу гэсэн товчлол вэ?",
-          options: [
-            "Open Support System",
-            "Office Smart Service",
-            "Online Self Service",
-            "Only Social System",
-          ],
-          answer: "Online Self Service",
-        },
-        {
-          text: "OSS page дээр хэрэглэгч ерөнхийдөө юу хийж чаддаг вэ?",
-          options: [
-            "Өөрийн үйлчилгээг шалгах, удирдах",
-            "Зөвхөн тоглоом тоглох",
-            "Компьютер format хийх",
-            "Wi‑Fi password өөрчлөхгүйгээр internet нэмэх",
-          ],
-          answer: "Өөрийн үйлчилгээг шалгах, удирдах",
-        },
-        {
-          text: "Нууц үгээ хамгаалах хамгийн зөв дадал аль нь вэ?",
-          options: [
-            "Бүгдэд хэлэх",
-            "Амархан таах үг хэрэглэх",
-            "Хүчтэй, давтагдахгүй password хэрэглэх",
-            "Цаасан дээр public газар наах",
-          ],
-          answer: "Хүчтэй, давтагдахгүй password хэрэглэх",
-        },
-        {
-          text: "Customer information-той ажиллахдаа юу хамгийн чухал вэ?",
-          options: [
-            "Нууцлал",
-            "Хурдан мартчих",
-            "Screenshot тараах",
-            "Random өөрчлөх",
-          ],
-          answer: "Нууцлал",
+          text: "DDish хэдэн жилийн ойн хүрээнд энэхүү giveaway явагдаж байна вэ?",
+          options: ["10 жил", "15 жил", "17 жил", "20 жил"],
+          answer: "17 жил",
         },
         {
           text: "HTML ямар утгатай товчлол вэ?",
           options: [
             "HyperText Markup Language",
-            "Home Tool Markup Language",
-            "Hyperlink Type Main Language",
             "HighText Machine Language",
+            "Hyper Transfer Mark Language",
+            "Home Tool Markup Language",
           ],
           answer: "HyperText Markup Language",
         },
         {
-          text: "CSS ихэвчлэн юунд ашиглагддаг вэ?",
+          text: "CSS юу хийхэд ашиглагддаг вэ?",
           options: [
-            "Дизайн, харагдац засах",
-            "CPU солих",
-            "Database устгах",
-            "Mouse цэнэглэх",
+            "Website-ийн дизайн, өнгө төрхийг засах",
+            "Server асаах",
+            "Database үүсгэх",
+            "Keyboard удирдах",
           ],
-          answer: "Дизайн, харагдац засах",
+          answer: "Website-ийн дизайн, өнгө төрхийг засах",
         },
         {
-          text: "JavaScript website дээр голчлон юу хийдэг вэ?",
+          text: "JavaScript-ийн үндсэн үүрэг юу вэ?",
           options: [
-            "Хөдөлгөөн, logic оруулдаг",
-            "Зөвхөн зураг хадгалдаг",
-            "Monitor цэвэрлэдэг",
-            "Printer асаадаг",
+            "Website-д хөдөлгөөн, logic оруулах",
+            "Зөвхөн зураг хадгалах",
+            "Monitor цэвэрлэх",
+            "Internet холбох",
           ],
-          answer: "Хөдөлгөөн, logic оруулдаг",
+          answer: "Website-д хөдөлгөөн, logic оруулах",
+        },
+        {
+          text: "<a> tag юунд ашиглагддаг вэ?",
+          options: [
+            "Link хийхэд",
+            "Зураг оруулахад",
+            "Хүснэгт хийхэд",
+            "Видео тоглуулахад",
+          ],
+          answer: "Link хийхэд",
+        },
+        {
+          text: "<img> tag юунд ашиглагддаг вэ?",
+          options: [
+            "Зураг оруулахад",
+            "Фонт солиход",
+            "Form илгээхэд",
+            "Audio тоглуулахад",
+          ],
+          answer: "Зураг оруулахад",
         },
         {
           text: "Responsive design гэж юу вэ?",
           options: [
-            "Өөр өөр дэлгэцэнд зохицож харагдах",
-            "Зөвхөн laptop дээр ажиллах",
-            "Зөвхөн pink theme ашиглах",
-            "Зөвхөн offline ажиллах",
+            "Өөр өөр дэлгэцэнд зохицож харагдах дизайн",
+            "Зөвхөн утсан дээр ажиллах сайт",
+            "Зөвхөн хар өнгийн theme",
+            "Internet байхгүй үед ажиллах mode",
           ],
-          answer: "Өөр өөр дэлгэцэнд зохицож харагдах",
+          answer: "Өөр өөр дэлгэцэнд зохицож харагдах дизайн",
         },
         {
-          text: "Teamwork дээр хамгийн зөв хандлага аль нь вэ?",
+          text: "GitHub юунд хэрэгтэй вэ?",
           options: [
-            "Мэдээллээ нуух",
-            "Хамтран ойлгомжтой харилцах",
-            "Хариуцлагаас зугтах",
-            "Асуухгүй таах",
+            "Код хадгалах, version хянах",
+            "Камер ажиллуулах",
+            "Дуу чангаруулах",
+            "Принтер цэнэглэх",
           ],
-          answer: "Хамтран ойлгомжтой харилцах",
+          answer: "Код хадгалах, version хянах",
         },
         {
-          text: "Асуудал гарвал хамгийн эхэнд юу хийх нь зөв бэ?",
+          text: "flex-direction: column юу хийдэг вэ?",
           options: [
-            "Сандарч орхиод явах",
-            "Шалтгааныг шалгаж, зөв сувгаар мэдэгдэх",
-            "Дур мэдэн data устгах",
-            "Бусдад шууд бурууг өгөх",
+            "Элементүүдийг дээрээс доош өрнө",
+            "Элементүүдийг зүүнээс баруун",
+            "Элементийг алга болгоно",
+            "Зургийг томруулна",
           ],
-          answer: "Шалтгааныг шалгаж, зөв сувгаар мэдэгдэх",
+          answer: "Элементүүдийг дээрээс доош өрнө",
+        },
+        {
+          text: "Random сонголт хийхэд JavaScript-ийн аль concept хэрэгтэй вэ?",
+          options: ["Math.random()", "console.clear()", "alert()", "prompt()"],
+          answer: "Math.random()",
         },
       ];
 
-      const introView = document.getElementById("introView");
-      const noticeView = document.getElementById("noticeView");
-      const quizView = document.getElementById("quizView");
-      const resultView = document.getElementById("resultView");
-      const startBtn = document.getElementById("startBtn");
-      const noticeOkBtn = document.getElementById("noticeOkBtn");
-      const questionNumber = document.getElementById("questionNumber");
-      const questionText = document.getElementById("questionText");
-      const optionsBox = document.getElementById("optionsBox");
-      const progressText = document.getElementById("progressText");
-      const progressFill = document.getElementById("progressFill");
-      const prevBtn = document.getElementById("prevBtn");
-      const nextBtn = document.getElementById("nextBtn");
-      const resultText = document.getElementById("resultText");
-      const scoreNumber = document.getElementById("scoreNumber");
-      const restartBtn = document.getElementById("restartBtn");
-      const ctaBox = document.getElementById("ctaBox");
-      const retryBox = document.getElementById("retryBox");
-
-      let currentQuestion = 0;
-      let selectedAnswers = new Array(questions.length).fill(null);
-
-      function renderQuestion() {
-        const question = questions[currentQuestion];
-        questionNumber.textContent = `Асуулт ${currentQuestion + 1}`;
-        questionText.textContent = question.text;
-        progressText.textContent = `${currentQuestion + 1} / ${questions.length}`;
-        progressFill.style.width = `${((currentQuestion + 1) / questions.length) * 100}%`;
-
-        optionsBox.innerHTML = "";
-
-        question.options.forEach((option) => {
-          const optionEl = document.createElement("div");
-          optionEl.className = "option";
-
-          if (selectedAnswers[currentQuestion] === option) {
-            optionEl.classList.add("selected");
-          }
-
-          optionEl.innerHTML = `
-            <div class="option-bullet"></div>
-            <span>${option}</span>
-          `;
-
-          optionEl.addEventListener("click", () => {
-            selectedAnswers[currentQuestion] = option;
-            renderQuestion();
-          });
-
-          optionsBox.appendChild(optionEl);
+      /* ═══════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════ */
+      function setMsg(id, txt, type = "info") {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.innerHTML = `<div class="msg ${type}">${txt}</div>`;
+      }
+      function clearMsg(id) {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = "";
+      }
+      function genCode() {
+        return Math.random().toString(36).substring(2, 8).toUpperCase();
+      }
+      function getOrCreateId() {
+        let id = sessionStorage.getItem("quiz_pid");
+        if (!id) {
+          id = crypto.randomUUID();
+          sessionStorage.setItem("quiz_pid", id);
+        }
+        return id;
+      }
+      function fmtMs(ms) {
+        if (!ms) return "—";
+        return ms < 1000 ? ms + "ms" : (ms / 1000).toFixed(1) + "s";
+      }
+      function unsubAll() {
+        state.channels.forEach((c) => {
+          try {
+            sb.removeChannel(c);
+          } catch (e) {}
         });
-
-        prevBtn.disabled = currentQuestion === 0;
-        prevBtn.style.opacity = currentQuestion === 0 ? "0.5" : "1";
-
-        if (currentQuestion === questions.length - 1) {
-          nextBtn.textContent = "Дуусгах";
-        } else {
-          nextBtn.textContent = "Дараах";
+        state.channels = [];
+      }
+      function clearTimer() {
+        if (state.timerInterval) {
+          clearInterval(state.timerInterval);
+          state.timerInterval = null;
         }
       }
-
-      function showResult() {
-        let score = 0;
-
-        questions.forEach((question, index) => {
-          if (selectedAnswers[index] === question.answer) {
-            score++;
-          }
-        });
-
-        quizView.classList.add("hidden");
-        resultView.classList.remove("hidden");
-
-        scoreNumber.textContent = `${score}/${questions.length}`;
-        resultText.textContent = `Та ${questions.length} асуултаас ${score} асуултад зөв хариулсан байна.`;
-
-        if (score >= 8) {
-          ctaBox.classList.remove("hidden");
-          retryBox.classList.add("hidden");
-        } else {
-          ctaBox.classList.add("hidden");
-          retryBox.classList.remove("hidden");
-        }
+      function show(id) {
+        [
+          "landingView",
+          "lobbyView",
+          "waitView",
+          "quizHostView",
+          "quizParView",
+          "resultsView",
+          "prizeView",
+        ].forEach((v) => document.getElementById(v).classList.add("hidden"));
+        document.getElementById(id).classList.remove("hidden");
       }
 
-      startBtn.addEventListener("click", () => {
-        introView.classList.add("hidden");
-        noticeView.classList.remove("hidden");
-      });
+      /* ═══════════════════════════════════════
+   LANDING
+═══════════════════════════════════════ */
+      function switchTab(t) {
+        document
+          .getElementById("tabJoin")
+          .classList.toggle("active", t === "join");
+        document
+          .getElementById("tabHost")
+          .classList.toggle("active", t === "host");
+        document
+          .getElementById("joinForm")
+          .classList.toggle("hidden", t !== "join");
+        document
+          .getElementById("hostForm")
+          .classList.toggle("hidden", t !== "host");
+        clearMsg("landingMsg");
+      }
 
-      noticeOkBtn.addEventListener("click", () => {
-        noticeView.classList.add("hidden");
-        quizView.classList.remove("hidden");
-        renderQuestion();
-      });
-
-      nextBtn.addEventListener("click", () => {
-        if (!selectedAnswers[currentQuestion]) {
-          alert("Эхлээд хариултаа сонгоно уу.");
+      async function joinLobby() {
+        const name = document.getElementById("joinName").value.trim();
+        const code = document
+          .getElementById("joinCode")
+          .value.trim()
+          .toUpperCase();
+        if (!name) {
+          setMsg("landingMsg", "Нэрээ оруулна уу", "err");
+          return;
+        }
+        if (code.length !== 6) {
+          setMsg("landingMsg", "6 оронтой код оруулна уу", "err");
           return;
         }
 
-        if (currentQuestion === questions.length - 1) {
-          showResult();
+        const { data: lobby, error } = await sb
+          .from("lobbies")
+          .select("*")
+          .eq("code", code)
+          .maybeSingle();
+        if (error || !lobby) {
+          setMsg("landingMsg", "Lobby олдсонгүй", "err");
+          return;
+        }
+        if (lobby.status !== "waiting") {
+          setMsg("landingMsg", "Lobby аль хэдийн эхэлсэн", "err");
+          return;
+        }
+
+        state.myId = getOrCreateId();
+        state.myName = name;
+        state.lobbyCode = code;
+        state.lobby = lobby;
+        state.isHost = false;
+        state.questions = lobby.questions;
+        state.timeLimit = lobby.time_limit;
+        state.score = 0;
+        state.currentQ = 0;
+
+        await sb
+          .from("participants")
+          .upsert([{ id: state.myId, lobby_code: code, name }], {
+            onConflict: "id",
+          });
+
+        showWaitView();
+      }
+
+      async function createLobby() {
+        const name = document.getElementById("hostName").value.trim();
+        if (!name) {
+          setMsg("landingMsg", "Нэрээ оруулна уу", "err");
+          return;
+        }
+
+        state.myId = getOrCreateId();
+        state.myName = name;
+        state.isHost = true;
+        state.lobbyCode = genCode();
+
+        const { error } = await sb.from("lobbies").insert([
+          {
+            code: state.lobbyCode,
+            host_id: state.myId,
+            status: "waiting",
+            questions: [],
+            current_q: 0,
+            time_limit: 20,
+          },
+        ]);
+        if (error) {
+          setMsg("landingMsg", "Lobby үүсгэхэд алдаа: " + error.message, "err");
+          return;
+        }
+
+        showLobbyView();
+      }
+
+      /* ═══════════════════════════════════════
+   LOBBY
+═══════════════════════════════════════ */
+      let localQuestions = [];
+
+      function showLobbyView() {
+        show("lobbyView");
+        document.getElementById("lobbyCodeDisplay").textContent =
+          state.lobbyCode;
+        subscribeParticipants();
+        renderQuestionEditor();
+      }
+
+      function subscribeParticipants() {
+        const ch = sb
+          .channel("lobby-" + state.lobbyCode)
+          .on(
+            "postgres_changes",
+            {
+              event: "INSERT",
+              schema: "public",
+              table: "participants",
+              filter: `lobby_code=eq.${state.lobbyCode}`,
+            },
+            () => refreshParticipants(),
+          )
+          .subscribe();
+        state.channels.push(ch);
+        refreshParticipants();
+      }
+
+      async function refreshParticipants() {
+        const { data } = await sb
+          .from("participants")
+          .select("*")
+          .eq("lobby_code", state.lobbyCode)
+          .order("joined_at");
+        state.participants = data || [];
+        const cnt = state.participants.length;
+        document.getElementById("lobbyPlayerCount").textContent = cnt;
+        document.getElementById("waitingCount").textContent =
+          cnt + " хүлээж байна";
+        document.getElementById("startQuizBtn").disabled =
+          cnt < 1 || localQuestions.length < 1;
+
+        const list = document.getElementById("playersList");
+        list.innerHTML = "";
+        state.participants.forEach((p) => {
+          const el = document.createElement("div");
+          el.className = "player-chip";
+          el.innerHTML = `<div class="avatar">${p.name[0].toUpperCase()}</div><span>${p.name}</span>`;
+          list.appendChild(el);
+        });
+      }
+
+      function loadTemplate() {
+        localQuestions = TEMPLATE_QUESTIONS.map((q) => ({
+          ...q,
+          options: [...q.options],
+        }));
+        renderQuestionEditor();
+        setMsg(
+          "lobbyMsg",
+          `${localQuestions.length} template асуулт нэмэгдлээ`,
+          "ok",
+        );
+      }
+
+      function renderQuestionEditor() {
+        const el = document.getElementById("questionsList");
+        el.innerHTML = "";
+        localQuestions.forEach((q, qi) => {
+          const div = document.createElement("div");
+          div.className = "q-editor";
+          div.innerHTML = `
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span class="bold small">Асуулт ${qi + 1}</span>
+        <button class="btn-danger btn-sm" style="margin-left:auto;padding:5px 10px" onclick="removeQuestion(${qi})">✕</button>
+      </div>
+      <div class="input-label">Асуулт</div>
+      <textarea rows="2" onchange="updateQText(${qi},this.value)">${q.text || ""}</textarea>
+      <div style="margin-top:10px">
+        <div class="input-label">Сонголтууд (ногоон = зөв хариулт)</div>
+        ${q.options
+          .map(
+            (opt, oi) => `
+          <div class="opt-row">
+            <input type="text" value="${opt || ""}" placeholder="Сонголт ${oi + 1}"
+              onchange="updateOpt(${qi},${oi},this.value)"/>
+            <button class="correct-toggle ${q.answer === opt ? "on" : ""}"
+              onclick="setAnswer(${qi},${oi})" title="Зөв хариулт болгох">✓</button>
+          </div>`,
+          )
+          .join("")}
+      </div>`;
+          el.appendChild(div);
+        });
+        document.getElementById("startQuizBtn").disabled =
+          state.participants.length < 1 || localQuestions.length < 1;
+      }
+
+      function addQuestion() {
+        localQuestions.push({
+          text: "",
+          options: ["", "", "", ""],
+          answer: "",
+        });
+        renderQuestionEditor();
+      }
+      function removeQuestion(i) {
+        localQuestions.splice(i, 1);
+        renderQuestionEditor();
+      }
+      function updateQText(i, val) {
+        localQuestions[i].text = val;
+      }
+      function updateOpt(qi, oi, val) {
+        const wasAnswer =
+          localQuestions[qi].answer === localQuestions[qi].options[oi];
+        localQuestions[qi].options[oi] = val;
+        if (wasAnswer) localQuestions[qi].answer = val;
+      }
+      function setAnswer(qi, oi) {
+        localQuestions[qi].answer = localQuestions[qi].options[oi];
+        renderQuestionEditor();
+      }
+
+      async function startQuiz() {
+        if (localQuestions.length < 1) {
+          setMsg("lobbyMsg", "Асуулт нэмнэ үү", "err");
+          return;
+        }
+        const invalid = localQuestions.find(
+          (q) => !q.text || !q.answer || q.options.some((o) => !o),
+        );
+        if (invalid) {
+          setMsg("lobbyMsg", "Бүх асуулт болон хариултыг бөглөнө үү", "err");
+          return;
+        }
+
+        const timeLimit =
+          parseInt(document.getElementById("timeLimitInput").value) || 20;
+        state.questions = localQuestions;
+        state.timeLimit = timeLimit;
+        state.currentQ = 0;
+
+        await sb.from("prizes").delete().eq("lobby_code", state.lobbyCode);
+        const prizeRows = PRIZES.map((p) => ({
+          lobby_code: state.lobbyCode,
+          name: p.name,
+          emoji: p.emoji,
+          claimed_by: null,
+          claimed_at: null,
+        }));
+        await sb.from("prizes").insert(prizeRows);
+
+        await sb
+          .from("lobbies")
+          .update({
+            status: "active",
+            questions: localQuestions,
+            current_q: 0,
+            time_limit: timeLimit,
+          })
+          .eq("code", state.lobbyCode);
+
+        unsubAll();
+        showQuizHostView();
+      }
+
+      function copyLobbyCode() {
+        navigator.clipboard.writeText(state.lobbyCode);
+        const btn = document.querySelector('[onclick="copyLobbyCode()"]');
+        if (btn) {
+          btn.textContent = "Хуулагдлаа ✓";
+          setTimeout(() => (btn.textContent = "Код хуулах"), 1500);
+        }
+      }
+
+      /* ═══════════════════════════════════════
+   WAIT
+═══════════════════════════════════════ */
+      function showWaitView() {
+        show("waitView");
+        document.getElementById("waitCodeDisplay").textContent =
+          state.lobbyCode;
+
+        const ch = sb
+          .channel("wait-" + state.lobbyCode + "-" + state.myId)
+          .on(
+            "postgres_changes",
+            {
+              event: "UPDATE",
+              schema: "public",
+              table: "lobbies",
+              filter: `code=eq.${state.lobbyCode}`,
+            },
+            (payload) => {
+              const lobby = payload.new;
+              if (lobby.status === "active") {
+                state.lobby = lobby;
+                state.questions = lobby.questions;
+                state.timeLimit = lobby.time_limit;
+                state.currentQ = lobby.current_q;
+                unsubAll();
+                showQuizParView();
+              }
+              if (lobby.status === "results") {
+                unsubAll();
+                showResults(false);
+              }
+              if (lobby.status === "prizes") {
+                unsubAll();
+                showPrizeView();
+              }
+            },
+          )
+          .on(
+            "postgres_changes",
+            {
+              event: "INSERT",
+              schema: "public",
+              table: "participants",
+              filter: `lobby_code=eq.${state.lobbyCode}`,
+            },
+            () => refreshWaitCount(),
+          )
+          .subscribe();
+        state.channels.push(ch);
+        refreshWaitCount();
+      }
+
+      async function refreshWaitCount() {
+        const { data } = await sb
+          .from("participants")
+          .select("id")
+          .eq("lobby_code", state.lobbyCode);
+        document.getElementById("waitPlayerCount").textContent =
+          `${(data || []).length} тоглогч нэгдсэн`;
+      }
+
+      /* ═══════════════════════════════════════
+   QUIZ HOST
+═══════════════════════════════════════ */
+      function showQuizHostView() {
+        show("quizHostView");
+        renderHostQuestion();
+        subscribeAnswersHost();
+      }
+
+      function renderHostQuestion() {
+        const q = state.questions[state.currentQ];
+        if (!q) return;
+        document.getElementById("hostQNum").textContent =
+          `Асуулт ${state.currentQ + 1}`;
+        document.getElementById("hostQText").textContent = q.text;
+        document.getElementById("hostQProgress").textContent =
+          `${state.currentQ + 1} / ${state.questions.length}`;
+
+        const grid = document.getElementById("hostOptGrid");
+        grid.innerHTML = "";
+        const letters = ["A", "B", "C", "D"];
+        q.options.forEach((opt, i) => {
+          const el = document.createElement("div");
+          el.className = "opt-card" + (opt === q.answer ? " correct-opt" : "");
+          el.innerHTML = `<div class="opt-letter">${letters[i]}</div><span>${opt}</span>`;
+          grid.appendChild(el);
+        });
+
+        document.getElementById("answeredCount").textContent = "0 хариуллаа";
+        startHostTimer();
+      }
+
+      function startHostTimer() {
+        clearTimer();
+        state.timerSec = state.timeLimit;
+        state.timerStart = Date.now();
+        updateTimerUI(state.timerSec, state.timeLimit);
+
+        state.timerInterval = setInterval(async () => {
+          state.timerSec--;
+          updateTimerUI(state.timerSec, state.timeLimit);
+          if (state.timerSec <= 0) {
+            clearTimer();
+            await advanceQuestion();
+          }
+        }, 1000);
+      }
+
+      function updateTimerUI(sec, total) {
+        const pct = sec / total;
+        const circumference = 188.5;
+        const offset = circumference * (1 - pct);
+        const arc = document.getElementById("timerArc");
+        if (arc) arc.style.strokeDashoffset = offset;
+        const num = document.getElementById("timerNum");
+        if (num) num.textContent = sec;
+        const bar = document.getElementById("timerBar");
+        if (bar) bar.style.width = pct * 100 + "%";
+        const parArc = document.getElementById("parTimerArc");
+        if (parArc) parArc.style.strokeDashoffset = offset;
+        const parNum = document.getElementById("parTimerNum");
+        if (parNum) parNum.textContent = sec;
+        const parBar = document.getElementById("parTimerBar");
+        if (parBar) parBar.style.width = pct * 100 + "%";
+      }
+
+      async function advanceQuestion() {
+        const next = state.currentQ + 1;
+        if (next >= state.questions.length) {
+          await sb
+            .from("lobbies")
+            .update({ status: "results", current_q: state.currentQ })
+            .eq("code", state.lobbyCode);
+          unsubAll();
+          showResults(true);
         } else {
-          currentQuestion++;
-          renderQuestion();
+          state.currentQ = next;
+          await sb
+            .from("lobbies")
+            .update({ current_q: next })
+            .eq("code", state.lobbyCode);
+          renderHostQuestion();
+          renderLiveStats();
         }
-      });
+      }
 
-      prevBtn.addEventListener("click", () => {
-        if (currentQuestion > 0) {
-          currentQuestion--;
-          renderQuestion();
+      async function endQuizEarly() {
+        if (!confirm("Quiz дуусгах уу?")) return;
+        clearTimer();
+        await sb
+          .from("lobbies")
+          .update({ status: "results", current_q: state.currentQ })
+          .eq("code", state.lobbyCode);
+        unsubAll();
+        showResults(true);
+      }
+
+      function subscribeAnswersHost() {
+        const ch = sb
+          .channel("answers-host-" + state.lobbyCode)
+          .on(
+            "postgres_changes",
+            {
+              event: "INSERT",
+              schema: "public",
+              table: "answers",
+              filter: `lobby_code=eq.${state.lobbyCode}`,
+            },
+            () => renderLiveStats(),
+          )
+          .subscribe();
+        state.channels.push(ch);
+        renderLiveStats();
+      }
+
+      async function renderLiveStats() {
+        const { data: answers } = await sb
+          .from("answers")
+          .select("*")
+          .eq("lobby_code", state.lobbyCode)
+          .order("created_at");
+        const { data: participants } = await sb
+          .from("participants")
+          .select("*")
+          .eq("lobby_code", state.lobbyCode);
+
+        const curQ = state.currentQ;
+        const liveList = document.getElementById("liveStatsList");
+        liveList.innerHTML = "";
+        const curAnswers = (answers || []).filter(
+          (a) => a.question_index === curQ,
+        );
+
+        document.getElementById("answeredCount").textContent =
+          `${curAnswers.length} / ${(participants || []).length} хариуллаа`;
+
+        (participants || []).forEach((p) => {
+          const a = curAnswers.find((x) => x.participant_id === p.id);
+          const row = document.createElement("div");
+          row.className = "stat-row" + (a ? " answered" : "");
+          row.innerHTML = `
+      <div class="sname">${p.name}</div>
+      ${
+        a
+          ? `<div class="stime">${fmtMs(a.time_ms)}</div>
+             <div class="smark ${a.correct ? "ok" : "err"}">${a.correct ? "✓" : "✗"}</div>`
+          : `<div class="smark wait">…</div>`
+      }`;
+          liveList.appendChild(row);
+        });
+
+        const hist = document.getElementById("qStatsHistory");
+        hist.innerHTML = "";
+        for (let qi = 0; qi < curQ; qi++) {
+          const qa = (answers || []).filter((a) => a.question_index === qi);
+          const correct = qa.filter((a) => a.correct).length;
+          const total = (participants || []).length;
+          const pct = total ? Math.round((correct / total) * 100) : 0;
+          const avgMs = qa.length
+            ? Math.round(qa.reduce((s, a) => s + a.time_ms, 0) / qa.length)
+            : 0;
+          const div = document.createElement("div");
+          div.className = "q-stat-card";
+          div.innerHTML = `
+      <div class="q-label">Асуулт ${qi + 1} — ${correct}/${total} зөв (${pct}%) · avg ${fmtMs(avgMs)}</div>
+      <div class="mini-bar"><div class="mini-bar-fill" style="width:${pct}%"></div></div>`;
+          hist.appendChild(div);
         }
-      });
+      }
 
-      restartBtn.addEventListener("click", () => {
-        currentQuestion = 0;
-        selectedAnswers = new Array(questions.length).fill(null);
-        resultView.classList.add("hidden");
-        introView.classList.remove("hidden");
-        noticeView.classList.add("hidden");
-        quizView.classList.add("hidden");
-      });
+      /* ═══════════════════════════════════════
+   QUIZ PARTICIPANT
+═══════════════════════════════════════ */
+      function showQuizParView() {
+        show("quizParView");
+        state.submitted = false;
+        state.selectedOpt = null;
+        renderParQuestion();
+        subscribeQuizUpdates();
+      }
+
+      function renderParQuestion() {
+        const q = state.questions[state.currentQ];
+        if (!q) return;
+        document.getElementById("parQNum").textContent = state.currentQ + 1;
+        document.getElementById("parTotal").textContent =
+          state.questions.length;
+        document.getElementById("parScore").textContent = state.score;
+        document.getElementById("parQText").textContent = q.text;
+        state.submitted = false;
+        state.selectedOpt = null;
+        state.timerStart = Date.now();
+        clearMsg("parMsg");
+
+        const list = document.getElementById("parOptList");
+        list.innerHTML = "";
+        const letters = ["A", "B", "C", "D"];
+        q.options.forEach((opt, i) => {
+          const el = document.createElement("div");
+          el.className = "par-opt";
+          el.dataset.opt = opt;
+          el.innerHTML = `<div class="opt-letter" style="width:30px;height:30px;font-size:13px;background:rgba(255,255,255,.1);border-radius:50%;display:grid;place-items:center;flex-shrink:0">${letters[i]}</div><span>${opt}</span>`;
+          el.addEventListener("click", () => selectParOpt(opt));
+          list.appendChild(el);
+        });
+      }
+
+      function selectParOpt(opt) {
+        if (state.submitted) return;
+        state.selectedOpt = opt;
+        document.querySelectorAll(".par-opt").forEach((el) => {
+          el.classList.toggle("chosen", el.dataset.opt === opt);
+        });
+        submitParAnswer();
+      }
+
+      async function submitParAnswer() {
+        if (state.submitted || !state.selectedOpt) return;
+        state.submitted = true;
+        const timeMs = Date.now() - state.timerStart;
+        const q = state.questions[state.currentQ];
+        const correct = state.selectedOpt === q.answer;
+        if (correct) state.score++;
+
+        document.querySelectorAll(".par-opt").forEach((el) => {
+          el.classList.add("locked");
+          if (el.dataset.opt === q.answer) el.classList.add("reveal-ok");
+          else if (el.dataset.opt === state.selectedOpt && !correct)
+            el.classList.add("reveal-err");
+        });
+
+        setMsg(
+          "parMsg",
+          correct ? "✓ Зөв!" : `✗ Зөв хариулт: ${q.answer}`,
+          correct ? "ok" : "err",
+        );
+        document.getElementById("parScore").textContent = state.score;
+
+        await sb.from("answers").upsert(
+          [
+            {
+              lobby_code: state.lobbyCode,
+              participant_id: state.myId,
+              participant_name: state.myName,
+              question_index: state.currentQ,
+              answer: state.selectedOpt,
+              correct,
+              time_ms: timeMs,
+            },
+          ],
+          { onConflict: "lobby_code,participant_id,question_index" },
+        );
+      }
+
+      function subscribeQuizUpdates() {
+        const ch = sb
+          .channel("quiz-par-" + state.lobbyCode + "-" + state.myId)
+          .on(
+            "postgres_changes",
+            {
+              event: "UPDATE",
+              schema: "public",
+              table: "lobbies",
+              filter: `code=eq.${state.lobbyCode}`,
+            },
+            (payload) => {
+              const lobby = payload.new;
+              if (
+                lobby.status === "active" &&
+                lobby.current_q !== state.currentQ
+              ) {
+                state.currentQ = lobby.current_q;
+                state.submitted = false;
+                state.selectedOpt = null;
+                renderParQuestion();
+              }
+              if (lobby.status === "results") {
+                clearTimer();
+                unsubAll();
+                showResults(false);
+              }
+              if (lobby.status === "prizes") {
+                unsubAll();
+                showPrizeView();
+              }
+            },
+          )
+          .subscribe();
+        state.channels.push(ch);
+      }
+
+      /* ═══════════════════════════════════════
+   RESULTS
+═══════════════════════════════════════ */
+      async function showResults(isHost) {
+        clearTimer();
+        show("resultsView");
+
+        const { data: answers } = await sb
+          .from("answers")
+          .select("*")
+          .eq("lobby_code", state.lobbyCode);
+        const { data: participants } = await sb
+          .from("participants")
+          .select("*")
+          .eq("lobby_code", state.lobbyCode);
+
+        const scoreMap = {};
+        (participants || []).forEach((p) => {
+          scoreMap[p.id] = { name: p.name, score: 0, timeCorrect: 0, id: p.id };
+        });
+        (answers || []).forEach((a) => {
+          if (!scoreMap[a.participant_id]) return;
+          if (a.correct) {
+            scoreMap[a.participant_id].score++;
+            scoreMap[a.participant_id].timeCorrect += a.time_ms;
+          }
+        });
+
+        const ranked = Object.values(scoreMap).sort((a, b) =>
+          b.score !== a.score
+            ? b.score - a.score
+            : a.timeCorrect - b.timeCorrect,
+        );
+        state.rankedPlayers = ranked;
+
+        const total = state.questions.length;
+        document.getElementById("resultsSubtitle").textContent =
+          `${(participants || []).length} тоглогч · ${total} асуулт`;
+
+        const podium = document.getElementById("podiumEl");
+        podium.innerHTML = "";
+        const order =
+          ranked.length >= 3 ? [ranked[1], ranked[0], ranked[2]] : ranked;
+        const heights = [120, 160, 90];
+        order.forEach((p, i) => {
+          if (!p) return;
+          const realRank = ranked.indexOf(p) + 1;
+          const div = document.createElement("div");
+          div.className = "podium-item";
+          div.innerHTML = `
+      <div class="podium-bar" style="height:${heights[i] || 80}px">
+        <div class="lb-rank r${realRank}" style="margin-bottom:8px">${realRank}</div>
+      </div>
+      <div class="podium-name">${p.name}</div>
+      <div class="podium-score">${p.score}/${total}</div>`;
+          podium.appendChild(div);
+        });
+
+        const lb = document.getElementById("leaderboardEl");
+        lb.innerHTML = "";
+        ranked.forEach((p, i) => {
+          const isWinner = p.score >= 8;
+          const isMine = p.id === state.myId;
+          const row = document.createElement("div");
+          row.className = "leaderboard-row" + (isWinner ? " winner" : "");
+          row.innerHTML = `
+      <div class="lb-rank r${i < 3 ? i + 1 : "n"}">${i + 1}</div>
+      <div style="flex:1">
+        <div class="lb-name">${p.name}${isMine ? " (Та)" : ""}</div>
+        <div class="lb-meta">${isWinner ? "🏅 Winner · " : ""}Зөв хариулсан хугацаа: ${fmtMs(p.timeCorrect)}</div>
+      </div>
+      ${isWinner ? '<span class="winner-tag">8+ ✓</span>' : ""}
+      <div style="text-align:right">
+        <div class="lb-score">${p.score}</div>
+        <div class="lb-time">${fmtMs(p.timeCorrect)}</div>
+      </div>`;
+          lb.appendChild(row);
+        });
+
+        document
+          .getElementById("hostResultActions")
+          .classList.toggle("hidden", !isHost);
+        document
+          .getElementById("parResultNote")
+          .classList.toggle("hidden", isHost);
+
+        if (!isHost) {
+          const ch = sb
+            .channel("results-wait-" + state.lobbyCode)
+            .on(
+              "postgres_changes",
+              {
+                event: "UPDATE",
+                schema: "public",
+                table: "lobbies",
+                filter: `code=eq.${state.lobbyCode}`,
+              },
+              (payload) => {
+                if (payload.new.status === "prizes") {
+                  unsubAll();
+                  showPrizeView();
+                }
+              },
+            )
+            .subscribe();
+          state.channels.push(ch);
+        }
+      }
+
+      async function goToPrizes() {
+        await sb
+          .from("lobbies")
+          .update({ status: "prizes" })
+          .eq("code", state.lobbyCode);
+        unsubAll();
+        showPrizeView();
+      }
+
+      /* ═══════════════════════════════════════
+   PRIZES
+═══════════════════════════════════════ */
+      async function showPrizeView() {
+        show("prizeView");
+        state.pickedPrize = null;
+        await refreshPrizeView();
+        subscribePrizes();
+      }
+
+      async function refreshPrizeView() {
+        const { data: prizes } = await sb
+          .from("prizes")
+          .select("*")
+          .eq("lobby_code", state.lobbyCode);
+        const { data: answers } = await sb
+          .from("answers")
+          .select("*")
+          .eq("lobby_code", state.lobbyCode);
+        const { data: participants } = await sb
+          .from("participants")
+          .select("*")
+          .eq("lobby_code", state.lobbyCode);
+        state.prizes = prizes || [];
+
+        const scoreMap = {};
+        (participants || []).forEach((p) => {
+          scoreMap[p.id] = { name: p.name, score: 0, timeCorrect: 0, id: p.id };
+        });
+        (answers || []).forEach((a) => {
+          if (!scoreMap[a.participant_id]) return;
+          if (a.correct) {
+            scoreMap[a.participant_id].score++;
+            scoreMap[a.participant_id].timeCorrect += a.time_ms;
+          }
+        });
+        const winners = Object.values(scoreMap)
+          .filter((p) => p.score >= 8)
+          .sort((a, b) => a.timeCorrect - b.timeCorrect);
+        state.winners = winners;
+
+        const claimedNames = (prizes || [])
+          .filter((p) => p.claimed_by)
+          .map((p) => p.claimed_by);
+        const turnPlayer = winners.find((w) => !claimedNames.includes(w.name));
+        state.currentPickerName = turnPlayer ? turnPlayer.name : null;
+
+        const isMyTurn = turnPlayer && turnPlayer.id === state.myId;
+        const iAmWinner = winners.some((w) => w.id === state.myId);
+        const myPrize = (prizes || []).find(
+          (p) => p.claimed_by === state.myName,
+        );
+
+        const banner = document.getElementById("prizeStatusBanner");
+        if (myPrize) {
+          banner.innerHTML = `<div class="your-turn-banner">🎁 Таны шагнал: ${myPrize.emoji} ${myPrize.name}</div>`;
+        } else if (!iAmWinner) {
+          banner.innerHTML = `<div class="wait-banner">Та 8-аас доош оноо авсан тул шагнал авахгүй.</div>`;
+        } else if (isMyTurn) {
+          banner.innerHTML = `<div class="your-turn-banner">🎉 Таны ээлж! Доороос шагналаа сонгоно уу.</div>`;
+        } else if (turnPlayer) {
+          banner.innerHTML = `<div class="wait-banner">⏳ ${turnPlayer.name}-ийн ээлж. Хүлээнэ үү...</div>`;
+        } else {
+          banner.innerHTML = `<div class="your-turn-banner">🎊 Бүх шагнал олгогдлоо!</div>`;
+        }
+
+        const grid = document.getElementById("prizeGrid");
+        grid.innerHTML = "";
+        state.pickedPrize = null;
+        document.getElementById("confirmPrizeBtn").classList.add("hidden");
+
+        (prizes || []).forEach((p) => {
+          const taken = !!p.claimed_by;
+          const div = document.createElement("div");
+          div.className =
+            "prize-card" +
+            (taken ? " taken" : "") +
+            (!isMyTurn || myPrize ? " locked" : "");
+          div.dataset.id = p.id;
+          div.innerHTML = `
+      <div class="prize-emoji">${p.emoji}</div>
+      <div class="prize-name">${p.name}</div>
+      <div class="prize-status">${taken ? p.claimed_by + " авсан" : ""}</div>`;
+          if (!taken && isMyTurn && !myPrize) {
+            div.addEventListener("click", () => selectPrize(p.id, div));
+          }
+          grid.appendChild(div);
+        });
+
+        const qList = document.getElementById("winnerQueueList");
+        qList.innerHTML = "";
+        if (winners.length === 0) {
+          qList.innerHTML =
+            '<div class="muted small">8+ оноотой тоглогч алга.</div>';
+        } else {
+          winners.forEach((w, i) => {
+            const claimed = claimedNames.includes(w.name);
+            const isTurn = w.name === state.currentPickerName;
+            const el = document.createElement("div");
+            el.className = "leaderboard-row" + (isTurn ? " winner" : "");
+            el.innerHTML = `
+        <div class="lb-rank ${i === 0 ? "r1" : i === 1 ? "r2" : i === 2 ? "r3" : "rn"}">${i + 1}</div>
+        <div style="flex:1"><div class="lb-name">${w.name}</div>
+          <div class="lb-meta">Оноо: ${w.score} · ${fmtMs(w.timeCorrect)}</div></div>
+        <span class="winner-tag">${claimed ? "Авлаа ✓" : isTurn ? "Сонгож байна..." : "Хүлээж байна"}</span>`;
+            qList.appendChild(el);
+          });
+        }
+
+        if (myPrize) {
+          document.getElementById("claimedBox").classList.remove("hidden");
+          document.getElementById("claimedEmoji").textContent = myPrize.emoji;
+          document.getElementById("claimedName").textContent = myPrize.name;
+        }
+      }
+
+      function selectPrize(prizeId, el) {
+        document
+          .querySelectorAll(".prize-card")
+          .forEach((c) => c.classList.remove("selected"));
+        el.classList.add("selected");
+        state.pickedPrize = prizeId;
+        document.getElementById("confirmPrizeBtn").classList.remove("hidden");
+      }
+
+      async function confirmPrize() {
+        if (!state.pickedPrize) return;
+        const btn = document.getElementById("confirmPrizeBtn");
+        btn.disabled = true;
+        btn.textContent = "Хадгалж байна...";
+
+        const { error } = await sb
+          .from("prizes")
+          .update({
+            claimed_by: state.myName,
+            claimed_at: new Date().toISOString(),
+          })
+          .eq("id", state.pickedPrize)
+          .is("claimed_by", null);
+
+        if (error) {
+          btn.disabled = false;
+          btn.textContent = "Сонгох ✓";
+          return;
+        }
+        await refreshPrizeView();
+      }
+
+      function subscribePrizes() {
+        const ch = sb
+          .channel("prizes-" + state.lobbyCode)
+          .on(
+            "postgres_changes",
+            {
+              event: "UPDATE",
+              schema: "public",
+              table: "prizes",
+              filter: `lobby_code=eq.${state.lobbyCode}`,
+            },
+            () => refreshPrizeView(),
+          )
+          .subscribe();
+        state.channels.push(ch);
+      }
+
+      show("landingView");
     </script>
   </body>
 </html>
