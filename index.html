@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Real-Time Quiz Giveaway</title>
+    <title>Supabase Quiz Giveaway</title>
     <style>
       * {
         box-sizing: border-box;
@@ -17,6 +17,9 @@
         --muted: #c7cff8;
         --accent: #8b5cf6;
         --accent-2: #ec4899;
+        --success: #22c55e;
+        --danger: #fb7185;
+        --warning: #f59e0b;
         --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
       }
       body {
@@ -104,8 +107,6 @@
         grid-template-columns: repeat(4, 1fr);
         gap: 14px;
         margin-top: 22px;
-        position: relative;
-        z-index: 1;
       }
       .stat-box {
         background: rgba(255, 255, 255, 0.07);
@@ -126,7 +127,7 @@
       }
       .layout {
         display: grid;
-        grid-template-columns: 1.12fr 0.88fr;
+        grid-template-columns: 1.1fr 0.9fr;
         gap: 22px;
         margin-top: 22px;
       }
@@ -147,12 +148,6 @@
         color: var(--muted);
         line-height: 1.65;
       }
-      .input-row {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 12px;
-        margin-bottom: 16px;
-      }
       input[type="text"] {
         width: 100%;
         padding: 15px 16px;
@@ -165,6 +160,9 @@
       }
       input[type="text"]::placeholder {
         color: #c7cff8;
+      }
+      .input-row {
+        margin-bottom: 16px;
       }
       .question {
         background: rgba(255, 255, 255, 0.06);
@@ -368,13 +366,12 @@
     <div class="container">
       <section class="hero">
         <span class="badge"
-          >⚡ Real-time • Firebase Firestore • Шууд prize олголт</span
+          >⚡ Supabase Real-time • 10 асуулт • Эхний 10 winner</span
         >
-        <h1>Real-Time Quiz Giveaway</h1>
+        <h1>Quiz Giveaway</h1>
         <p class="subtitle">
-          10 асуултад бүгдэд нь зөв хариулсан эхний 10 хүнд шагнал шууд random
-          байдлаар оноогдоно. Бусад хүмүүс линкээр орж хариулахад мэдээлэл нь
-          бүгдэд real-time-ээр шинэчлэгдэнэ.
+          10 асуултад бүгдэд нь зөв хариулсан эхний 10 хүнд шагнал random
+          байдлаар оноогдоно. Бүх хүн бүгдийн үр дүнг харна.
         </p>
         <div class="stats">
           <div class="stat-box">
@@ -382,11 +379,11 @@
             <p>10</p>
           </div>
           <div class="stat-box">
-            <h3>Шалгарах хүн</h3>
+            <h3>Winner limit</h3>
             <p>10</p>
           </div>
           <div class="stat-box">
-            <h3>Шагналын төрөл</h3>
+            <h3>Шагналын тоо</h3>
             <p>10</p>
           </div>
           <div class="stat-box">
@@ -400,8 +397,8 @@
         <div class="card">
           <h2>Оролцох хэсэг</h2>
           <p class="desc">
-            Нэрээ оруулаад 10 асуултад хариул. Хэрэв 10/10 зөв бөгөөд эхний 10
-            дотор багтсан бол шагнал чинь тэр дороо random-оор оноогдоно.
+            Нэрээ оруулаад 10 асуултад хариул. 10/10 зөв бол winner list дээр
+            орж шагнал авна.
           </p>
           <div class="input-row">
             <input id="playerName" type="text" placeholder="Нэрээ бичнэ үү" />
@@ -417,46 +414,27 @@
           </div>
           <div id="messageBox" class="message"></div>
           <p class="small-note">
-            Нэг нэрээр нэг л удаа орно. Энэ хувилбар нь Firebase Cloud Firestore
-            ашиглаж real-time update хийнэ.
+            Энэ хувилбар дээр бүгдээрээ winner list-ийг харна. Submit хийсэн хүн
+            өөрийн авсан шагналаа шууд message дээр бас харна.
           </p>
         </div>
 
         <div class="stack">
           <div class="card">
-            <h2>Шууд шалгарсан хүмүүс</h2>
-            <p class="desc">
-              Эхний 10 perfect score оролцогч энд real-time харагдана.
-            </p>
-            <div id="qualifiedList" class="list"></div>
-          </div>
-          <div class="card">
-            <h2>Шагнал авсан хүмүүс</h2>
-            <p class="desc">
-              10/10 зөв хариулмагц шагнал шууд random байдлаар оноогдоно.
-            </p>
+            <h2>Winner list</h2>
+            <p class="desc">Бүх хүн бүгдийн үр дүнг энд харна.</p>
             <div id="winnerList" class="list"></div>
           </div>
+
           <div class="card">
-            <h2>Admin тохиргоо</h2>
+            <h2>Тохиргоо</h2>
             <p class="desc">
-              Эхний удаа <span class="code">Initialize giveaway</span> дарж
-              шагналуудаа database руу оруулна.
+              Доорх массив дээр асуулт болон шагналаа хүссэнээрээ солино.
             </p>
-            <div class="button-row">
-              <button class="primary" id="initBtn" type="button">
-                Initialize giveaway
-              </button>
-              <button class="ghost" id="resetAllBtn" type="button">
-                Бүх data reset
-              </button>
-            </div>
             <p class="small-note">
-              Step 1: Firebase project үүсгэ.<br />
-              Step 2: Доорх <span class="code">firebaseConfig</span>-оо
-              өөрийнхөөрөө солино.<br />
-              Step 3: Firestore Database асаана.<br />
-              Step 4: Линкээ бусдад явуул.
+              Table нэр: <span class="code">participants</span><br />
+              Columns:
+              <span class="code">id, name, score, prize, created_at</span>
             </p>
           </div>
         </div>
@@ -464,33 +442,20 @@
     </div>
 
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-      import {
-        getFirestore,
-        doc,
-        getDoc,
-        setDoc,
-        deleteDoc,
-        collection,
-        query,
-        orderBy,
-        onSnapshot,
-        serverTimestamp,
-        runTransaction,
-        getDocs,
-      } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-      // Supabase setup
       import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
       const supabaseUrl = "https://xkztpyvywqajxbfbgpkb.supabase.co";
       const supabaseKey = "sb_publishable_6x2VmmEGib865Isj7RONLQ_taXk0VwM";
-
       const supabase = createClient(supabaseUrl, supabaseKey);
 
       const questions = [
         {
-          text: "1. HTML ямар утгатай товчлол вэ?",
+          text: "1. DDish хэдэн жилийн ойн хүрээнд энэхүү giveaway явагдаж байна вэ?",
+          options: ["10 жил", "15 жил", "17 жил", "20 жил"],
+          answer: "17 жил",
+        },
+        {
+          text: "2. HTML ямар утгатай товчлол вэ?",
           options: [
             "HyperText Markup Language",
             "HighText Machine Language",
@@ -500,7 +465,7 @@
           answer: "HyperText Markup Language",
         },
         {
-          text: "2. CSS юу хийхэд ашиглагддаг вэ?",
+          text: "3. CSS юу хийхэд ашиглагддаг вэ?",
           options: [
             "Website-ийн дизайн, өнгө төрхийг засах",
             "Server асаах",
@@ -510,7 +475,7 @@
           answer: "Website-ийн дизайн, өнгө төрхийг засах",
         },
         {
-          text: "3. JavaScript-ийн үндсэн үүрэг юу вэ?",
+          text: "4. JavaScript-ийн үндсэн үүрэг юу вэ?",
           options: [
             "Website-д хөдөлгөөн, logic оруулах",
             "Зөвхөн зураг хадгалах",
@@ -520,7 +485,7 @@
           answer: "Website-д хөдөлгөөн, logic оруулах",
         },
         {
-          text: "4. <a> tag юунд ашиглагддаг вэ?",
+          text: "5. <a> tag юунд ашиглагддаг вэ?",
           options: [
             "Link хийхэд",
             "Зураг оруулахад",
@@ -530,7 +495,7 @@
           answer: "Link хийхэд",
         },
         {
-          text: "5. <img> tag юунд ашиглагддаг вэ?",
+          text: "6. <img> tag юунд ашиглагддаг вэ?",
           options: [
             "Зураг оруулахад",
             "Фонт солиход",
@@ -540,7 +505,7 @@
           answer: "Зураг оруулахад",
         },
         {
-          text: "6. Responsive design гэж юу вэ?",
+          text: "7. Responsive design гэж юу вэ?",
           options: [
             "Өөр өөр дэлгэцэнд зохицож харагдах дизайн",
             "Зөвхөн утсан дээр ажиллах сайт",
@@ -550,7 +515,7 @@
           answer: "Өөр өөр дэлгэцэнд зохицож харагдах дизайн",
         },
         {
-          text: "7. GitHub юунд хэрэгтэй вэ?",
+          text: "8. GitHub юунд хэрэгтэй вэ?",
           options: [
             "Код хадгалах, version хянах",
             "Камер ажиллуулах",
@@ -560,7 +525,7 @@
           answer: "Код хадгалах, version хянах",
         },
         {
-          text: "8. flex-direction: column юу хийдэг вэ?",
+          text: "9. flex-direction: column юу хийдэг вэ?",
           options: [
             "Элементүүдийг дээрээс доош өрнө",
             "Элементүүдийг зүүнээс баруун",
@@ -570,23 +535,13 @@
           answer: "Элементүүдийг дээрээс доош өрнө",
         },
         {
-          text: "9. localStorage юу вэ?",
-          options: [
-            "Browser дотор жижиг мэдээлэл хадгалах сан",
-            "Laptop-ийн fan",
-            "Screen recorder",
-            "Photo editor",
-          ],
-          answer: "Browser дотор жижиг мэдээлэл хадгалах сан",
-        },
-        {
           text: "10. random сонголт хийхэд JavaScript-ийн аль concept хэрэгтэй вэ?",
           options: ["Math.random()", "console.clear()", "alert()", "prompt()"],
           answer: "Math.random()",
         },
       ];
 
-      const initialPrizes = [
+      const gifts = [
         "Саван",
         "Аяга",
         "Үнэртэй лаа",
@@ -599,28 +554,15 @@
         "Mini gift box",
       ];
 
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-
       const quizForm = document.getElementById("quizForm");
       const submitBtn = document.getElementById("submitBtn");
       const resetBtn = document.getElementById("resetBtn");
-      const initBtn = document.getElementById("initBtn");
-      const resetAllBtn = document.getElementById("resetAllBtn");
       const messageBox = document.getElementById("messageBox");
       const playerNameInput = document.getElementById("playerName");
-      const qualifiedList = document.getElementById("qualifiedList");
       const winnerList = document.getElementById("winnerList");
       const remainingPrizeCount = document.getElementById(
         "remainingPrizeCount",
       );
-
-      const stateRef = doc(db, "giveaway", "state");
-      const participantsRef = collection(db, "participants");
-
-      function slugifyName(name) {
-        return name.trim().toLowerCase().replace(/\s+/g, " ");
-      }
 
       function showMessage(text, type = "info") {
         messageBox.textContent = text;
@@ -636,6 +578,7 @@
           title.textContent = question.text;
           const options = document.createElement("div");
           options.className = "options";
+
           question.options.forEach((optionText) => {
             const label = document.createElement("label");
             label.className = "option";
@@ -645,45 +588,29 @@
             `;
             options.appendChild(label);
           });
+
           box.appendChild(title);
           box.appendChild(options);
           quizForm.appendChild(box);
         });
       }
 
-      function renderQualified(players) {
-        qualifiedList.innerHTML = "";
-        if (!players.length) {
-          qualifiedList.innerHTML =
-            '<div class="empty">Одоогоор шалгарсан хүн алга.</div>';
-          return;
-        }
-        players.forEach((player, index) => {
-          const item = document.createElement("div");
-          item.className = "item";
-          item.innerHTML = `
-            <div class="person">
-              <div class="rank">${index + 1}</div>
-              <div class="person-info">
-                <div class="name">${player.name}</div>
-                <div class="meta">10/10 зөв • prize: ${player.prize || "—"}</div>
-              </div>
-            </div>
-            <span class="pill green">Qualified</span>
-          `;
-          qualifiedList.appendChild(item);
-        });
+      function resetForm() {
+        quizForm.reset();
+        showMessage("Сонголтууд цэвэрлэгдлээ.", "info");
       }
 
       function renderWinners(players) {
         winnerList.innerHTML = "";
-        const winners = players.filter((player) => !!player.prize);
-        if (!winners.length) {
+
+        if (!players.length) {
           winnerList.innerHTML =
-            '<div class="empty">Одоогоор шагнал авсан хүн алга.</div>';
+            '<div class="empty">Одоогоор winner алга.</div>';
+          remainingPrizeCount.textContent = gifts.length;
           return;
         }
-        winners.forEach((player, index) => {
+
+        players.forEach((player, index) => {
           const item = document.createElement("div");
           item.className = "item";
           item.innerHTML = `
@@ -694,70 +621,43 @@
                 <div class="meta">${player.prize}</div>
               </div>
             </div>
-            <span class="pill pink">Random prize</span>
+            <span class="pill pink">10/10</span>
           `;
           winnerList.appendChild(item);
         });
+
+        remainingPrizeCount.textContent = gifts.length - players.length;
       }
 
-      async function initializeGiveaway() {
-        try {
-          const snapshot = await getDoc(stateRef);
-          if (snapshot.exists()) {
-            showMessage("Giveaway state аль хэдийнэ үүссэн байна.", "info");
-            return;
-          }
-          await setDoc(stateRef, {
-            availablePrizes: initialPrizes,
-            totalPrizes: initialPrizes.length,
-            winnersLimit: 10,
-            qualifiedCount: 0,
-            participantNames: [],
-            createdAt: serverTimestamp(),
-          });
-          showMessage("Giveaway амжилттай initialize хийгдлээ.", "success");
-        } catch (error) {
+      async function loadWinners() {
+        const { data, error } = await supabase
+          .from("participants")
+          .select("*")
+          .order("created_at", { ascending: true });
+
+        if (error) {
           console.error(error);
-          showMessage("Initialize хийх үед алдаа гарлаа.", "error");
-        }
-      }
-
-      async function resetAllData() {
-        const ok = confirm("Бүх оролцогч, шагналын data-г бүрэн устгах уу?");
-        if (!ok) return;
-        try {
-          const allParticipants = await getDocs(participantsRef);
-          const deletePromises = [];
-          allParticipants.forEach((item) =>
-            deletePromises.push(deleteDoc(doc(db, "participants", item.id))),
+          showMessage(
+            "Supabase-аас winner list унших үед алдаа гарлаа.",
+            "error",
           );
-          await Promise.all(deletePromises);
-          await setDoc(stateRef, {
-            availablePrizes: initialPrizes,
-            totalPrizes: initialPrizes.length,
-            winnersLimit: 10,
-            qualifiedCount: 0,
-            participantNames: [],
-            createdAt: serverTimestamp(),
-          });
-          showMessage("Бүх data reset хийгдлээ.", "success");
-        } catch (error) {
-          console.error(error);
-          showMessage("Reset хийх үед алдаа гарлаа.", "error");
+          return;
         }
+
+        renderWinners(data || []);
       }
 
       async function submitQuiz() {
-        const rawName = playerNameInput.value.trim();
-        const normalizedName = slugifyName(rawName);
+        const name = playerNameInput.value.trim();
 
-        if (!rawName) {
+        if (!name) {
           showMessage("Нэрээ оруулна уу.", "error");
           return;
         }
 
         let score = 0;
         let allAnswered = true;
+
         questions.forEach((question, index) => {
           const selected = document.querySelector(
             `input[name="question-${index}"]:checked`,
@@ -776,7 +676,7 @@
 
         if (score !== 10) {
           showMessage(
-            `${rawName}, таны оноо ${score}/10 байна. Шагнал авахын тулд 10/10 хэрэгтэй.`,
+            `${name}, таны оноо ${score}/10 байна. Winner болохын тулд 10/10 авах хэрэгтэй.`,
             "error",
           );
           return;
@@ -786,118 +686,99 @@
         submitBtn.textContent = "Илгээж байна...";
 
         try {
-          const result = await runTransaction(db, async (transaction) => {
-            const stateSnap = await transaction.get(stateRef);
-            if (!stateSnap.exists()) throw new Error("NOT_INITIALIZED");
+          const { data: existing, error: existingError } = await supabase
+            .from("participants")
+            .select("id,name")
+            .eq("name", name)
+            .maybeSingle();
 
-            const state = stateSnap.data();
-            const participantNames = state.participantNames || [];
-            const availablePrizes = state.availablePrizes || [];
-            const winnersLimit = state.winnersLimit || 10;
-            const qualifiedCount = state.qualifiedCount || 0;
+          if (existingError) {
+            throw existingError;
+          }
 
-            if (participantNames.includes(normalizedName))
-              throw new Error("ALREADY_JOINED");
-            if (qualifiedCount >= winnersLimit || availablePrizes.length === 0)
-              throw new Error("FULL");
+          if (existing) {
+            showMessage("Энэ нэрээр аль хэдийн winner болсон байна.", "info");
+            return;
+          }
 
-            const randomIndex = Math.floor(
-              Math.random() * availablePrizes.length,
-            );
-            const assignedPrize = availablePrizes[randomIndex];
-            const nextAvailablePrizes = availablePrizes.filter(
-              (_, index) => index !== randomIndex,
-            );
-            const participantDocRef = doc(participantsRef);
+          const { data: winners, error: winnersError } = await supabase
+            .from("participants")
+            .select("id,prize")
+            .order("created_at", { ascending: true });
 
-            transaction.set(participantDocRef, {
-              name: rawName,
-              normalizedName,
-              score: 10,
-              prize: assignedPrize,
-              submittedAt: serverTimestamp(),
-            });
+          if (winnersError) {
+            throw winnersError;
+          }
 
-            transaction.update(stateRef, {
-              availablePrizes: nextAvailablePrizes,
-              qualifiedCount: qualifiedCount + 1,
-              participantNames: [...participantNames, normalizedName],
-            });
+          if ((winners || []).length >= 10) {
+            showMessage("Эхний 10 winner аль хэдийн бүрдсэн байна.", "info");
+            return;
+          }
 
-            return { assignedPrize };
-          });
+          const usedPrizes = (winners || []).map((item) => item.prize);
+          const availablePrizes = gifts.filter(
+            (gift) => !usedPrizes.includes(gift),
+          );
+
+          if (!availablePrizes.length) {
+            showMessage("Шагнал дууссан байна.", "info");
+            return;
+          }
+
+          const randomPrize =
+            availablePrizes[Math.floor(Math.random() * availablePrizes.length)];
+
+          const { error: insertError } = await supabase
+            .from("participants")
+            .insert([
+              {
+                name,
+                score: 10,
+                prize: randomPrize,
+              },
+            ]);
+
+          if (insertError) {
+            throw insertError;
+          }
 
           showMessage(
-            `Баяр хүргэе ${rawName}! Та 10/10 авч, танд \"${result.assignedPrize}\" random-оор оноогдлоо.`,
+            `Баяр хүргэе ${name}! Та 10/10 авч, танд \"${randomPrize}\" оноогдлоо.`,
             "success",
           );
           quizForm.reset();
           playerNameInput.value = "";
         } catch (error) {
           console.error(error);
-          if (error.message === "NOT_INITIALIZED") {
-            showMessage(
-              "Эхлээд admin хэсгээс Initialize giveaway дарна уу.",
-              "info",
-            );
-          } else if (error.message === "ALREADY_JOINED") {
-            showMessage("Энэ нэрээр аль хэдийнэ оролцсон байна.", "info");
-          } else if (error.message === "FULL") {
-            showMessage(
-              "Эхний 10 хүн бүрдсэн эсвэл бүх шагнал тараагдсан байна.",
-              "info",
-            );
-          } else {
-            showMessage(
-              "Хариу илгээх үед алдаа гарлаа. Firebase config болон Firestore rules-ээ шалгана уу.",
-              "error",
-            );
-          }
+          showMessage(
+            "Submit хийх үед алдаа гарлаа. Table, policies, column name-аа шалгана уу.",
+            "error",
+          );
         } finally {
           submitBtn.disabled = false;
           submitBtn.textContent = "Хариугаа илгээх";
         }
       }
 
-      function resetForm() {
-        quizForm.reset();
-        showMessage("Сонголтууд цэвэрлэгдлээ.", "info");
-      }
-
-      function listenState() {
-        onSnapshot(stateRef, (snapshot) => {
-          if (!snapshot.exists()) {
-            remainingPrizeCount.textContent = initialPrizes.length;
-            return;
-          }
-          const data = snapshot.data();
-          remainingPrizeCount.textContent = (data.availablePrizes || []).length;
-        });
-      }
-
-      function listenParticipants() {
-        const participantsQuery = query(
-          participantsRef,
-          orderBy("submittedAt", "asc"),
-        );
-        onSnapshot(participantsQuery, (snapshot) => {
-          const players = snapshot.docs.map((item) => ({
-            id: item.id,
-            ...item.data(),
-          }));
-          renderQualified(players);
-          renderWinners(players);
-        });
+      function setupRealtime() {
+        supabase
+          .channel("participants-live")
+          .on(
+            "postgres_changes",
+            { event: "*", schema: "public", table: "participants" },
+            async () => {
+              await loadWinners();
+            },
+          )
+          .subscribe();
       }
 
       submitBtn.addEventListener("click", submitQuiz);
       resetBtn.addEventListener("click", resetForm);
-      initBtn.addEventListener("click", initializeGiveaway);
-      resetAllBtn.addEventListener("click", resetAllData);
 
       renderQuestions();
-      listenState();
-      listenParticipants();
+      loadWinners();
+      setupRealtime();
     </script>
   </body>
 </html>
