@@ -8,6 +8,7 @@
       * {
         box-sizing: border-box;
       }
+
       :root {
         --bg-1: #0b1020;
         --bg-2: #151b35;
@@ -22,6 +23,7 @@
         --warning: #f59e0b;
         --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
       }
+
       body {
         margin: 0;
         min-height: 100vh;
@@ -40,10 +42,12 @@
           ),
           linear-gradient(135deg, var(--bg-1), var(--bg-2));
       }
+
       .container {
         width: min(1180px, calc(100% - 28px));
         margin: 24px auto 40px;
       }
+
       .hero,
       .card {
         background: var(--card);
@@ -51,12 +55,14 @@
         box-shadow: var(--shadow);
         backdrop-filter: blur(16px);
       }
+
       .hero {
         padding: 28px;
         border-radius: 32px;
         position: relative;
         overflow: hidden;
       }
+
       .hero::before,
       .hero::after {
         content: "";
@@ -65,6 +71,7 @@
         filter: blur(10px);
         pointer-events: none;
       }
+
       .hero::before {
         width: 250px;
         height: 250px;
@@ -72,6 +79,7 @@
         right: -70px;
         top: -80px;
       }
+
       .hero::after {
         width: 180px;
         height: 180px;
@@ -79,6 +87,7 @@
         left: -30px;
         bottom: -50px;
       }
+
       .badge {
         display: inline-flex;
         align-items: center;
@@ -90,11 +99,13 @@
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid var(--line);
       }
+
       h1 {
         margin: 16px 0 8px;
         font-size: clamp(34px, 6vw, 64px);
         line-height: 0.98;
       }
+
       .subtitle {
         max-width: 760px;
         color: var(--muted);
@@ -102,52 +113,66 @@
         font-size: 16px;
         margin: 0;
       }
+
       .stats {
         display: grid;
         grid-template-columns: repeat(4, 1fr);
         gap: 14px;
         margin-top: 22px;
       }
+
       .stat-box {
         background: rgba(255, 255, 255, 0.07);
         border: 1px solid var(--line);
         border-radius: 22px;
         padding: 18px;
       }
+
       .stat-box h3 {
         margin: 0 0 8px;
         font-size: 14px;
         color: var(--muted);
         font-weight: 500;
       }
+
       .stat-box p {
         margin: 0;
         font-size: 28px;
         font-weight: 800;
       }
+
       .layout {
         display: grid;
         grid-template-columns: 1.1fr 0.9fr;
         gap: 22px;
         margin-top: 22px;
       }
+
       .stack {
         display: grid;
         gap: 22px;
       }
+
       .card {
         border-radius: 28px;
         padding: 24px;
       }
+
       .card h2 {
         margin: 0 0 8px;
         font-size: 24px;
       }
+
       .card p.desc {
         margin: 0 0 20px;
         color: var(--muted);
         line-height: 1.65;
       }
+
+      .input-row {
+        margin-bottom: 16px;
+      }
+
       input[type="text"] {
         width: 100%;
         padding: 15px 16px;
@@ -158,12 +183,11 @@
         outline: none;
         font-size: 15px;
       }
+
       input[type="text"]::placeholder {
         color: #c7cff8;
       }
-      .input-row {
-        margin-bottom: 16px;
-      }
+
       .question {
         background: rgba(255, 255, 255, 0.06);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -171,15 +195,18 @@
         padding: 18px;
         margin-bottom: 14px;
       }
+
       .question h3 {
         margin: 0 0 12px;
         font-size: 16px;
         line-height: 1.5;
       }
+
       .options {
         display: grid;
         gap: 10px;
       }
+
       .option {
         display: flex;
         align-items: center;
@@ -191,19 +218,23 @@
         cursor: pointer;
         transition: 0.18s ease;
       }
+
       .option:hover {
         transform: translateY(-1px);
         border-color: rgba(255, 255, 255, 0.2);
       }
+
       .option input {
         accent-color: var(--accent);
       }
+
       .button-row {
         display: flex;
         flex-wrap: wrap;
         gap: 12px;
         margin-top: 14px;
       }
+
       button {
         border: 0;
         cursor: pointer;
@@ -213,23 +244,22 @@
         font-weight: 700;
         transition: 0.18s ease;
       }
+
       button:hover {
         transform: translateY(-2px);
       }
+
       .primary {
         background: linear-gradient(135deg, var(--accent), var(--accent-2));
         color: white;
       }
+
       .secondary {
         background: rgba(255, 255, 255, 0.08);
         color: white;
         border: 1px solid var(--line);
       }
-      .ghost {
-        background: transparent;
-        color: var(--muted);
-        border: 1px dashed rgba(255, 255, 255, 0.18);
-      }
+
       .message {
         margin-top: 16px;
         padding: 14px 16px;
@@ -237,28 +267,34 @@
         line-height: 1.65;
         display: none;
       }
+
       .message.show {
         display: block;
       }
+
       .message.success {
         background: rgba(34, 197, 94, 0.14);
         color: #d9ffe5;
         border: 1px solid rgba(34, 197, 94, 0.3);
       }
+
       .message.error {
         background: rgba(251, 113, 133, 0.14);
         color: #ffe4ea;
         border: 1px solid rgba(251, 113, 133, 0.28);
       }
+
       .message.info {
         background: rgba(245, 158, 11, 0.14);
         color: #fff0cc;
         border: 1px solid rgba(245, 158, 11, 0.28);
       }
+
       .list {
         display: grid;
         gap: 10px;
       }
+
       .item {
         display: flex;
         align-items: center;
@@ -269,12 +305,14 @@
         border-radius: 18px;
         padding: 14px;
       }
+
       .person {
         display: flex;
         align-items: center;
         gap: 12px;
         min-width: 0;
       }
+
       .rank {
         width: 38px;
         height: 38px;
@@ -285,20 +323,24 @@
         background: linear-gradient(135deg, var(--accent), var(--accent-2));
         flex-shrink: 0;
       }
+
       .person-info {
         min-width: 0;
       }
+
       .name {
         font-weight: 700;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
       }
+
       .meta {
         margin-top: 4px;
         color: var(--muted);
         font-size: 13px;
       }
+
       .pill {
         flex-shrink: 0;
         padding: 8px 12px;
@@ -306,24 +348,24 @@
         font-size: 12px;
         font-weight: 700;
       }
-      .pill.green {
-        background: rgba(34, 197, 94, 0.14);
-        color: #dcffe7;
-      }
+
       .pill.pink {
         background: rgba(236, 72, 153, 0.14);
         color: #ffd9ea;
       }
+
       .empty {
         color: var(--muted);
         padding-top: 8px;
       }
+
       .small-note {
         color: var(--muted);
         line-height: 1.7;
         font-size: 13px;
         margin-top: 14px;
       }
+
       .code {
         font-family: Consolas, monospace;
         font-size: 13px;
@@ -332,30 +374,37 @@
         padding: 3px 7px;
         border-radius: 8px;
       }
+
       @media (max-width: 980px) {
         .layout {
           grid-template-columns: 1fr;
         }
+
         .stats {
           grid-template-columns: repeat(2, 1fr);
         }
       }
+
       @media (max-width: 640px) {
         .container {
           width: min(100% - 18px, 1180px);
           margin-top: 12px;
         }
+
         .hero,
         .card {
           padding: 18px;
           border-radius: 22px;
         }
+
         .stats {
           grid-template-columns: 1fr;
         }
+
         .button-row {
           flex-direction: column;
         }
+
         button {
           width: 100%;
         }
@@ -373,6 +422,7 @@
           10 асуултад бүгдэд нь зөв хариулсан эхний 10 хүнд шагнал random
           байдлаар оноогдоно. Бүх хүн бүгдийн үр дүнг харна.
         </p>
+
         <div class="stats">
           <div class="stat-box">
             <h3>Асуултын тоо</h3>
@@ -400,10 +450,13 @@
             Нэрээ оруулаад 10 асуултад хариул. 10/10 зөв бол winner list дээр
             орж шагнал авна.
           </p>
+
           <div class="input-row">
             <input id="playerName" type="text" placeholder="Нэрээ бичнэ үү" />
           </div>
+
           <form id="quizForm"></form>
+
           <div class="button-row">
             <button class="primary" id="submitBtn" type="button">
               Хариугаа илгээх
@@ -412,10 +465,12 @@
               Сонголтоо цэвэрлэх
             </button>
           </div>
+
           <div id="messageBox" class="message"></div>
+
           <p class="small-note">
-            Энэ хувилбар дээр бүгдээрээ winner list-ийг харна. Submit хийсэн хүн
-            өөрийн авсан шагналаа шууд message дээр бас харна.
+            Бүх хүн бүгдийн winner list-ийг харна. Submit хийсэн хүн өөрийн
+            авсан шагналаа шууд message дээр харна.
           </p>
         </div>
 
@@ -429,7 +484,7 @@
           <div class="card">
             <h2>Тохиргоо</h2>
             <p class="desc">
-              Доорх массив дээр асуулт болон шагналаа хүссэнээрээ солино.
+              Доорх асуулт, шагналын массивыг хүссэнээрээ өөрчилж болно.
             </p>
             <p class="small-note">
               Table нэр: <span class="code">participants</span><br />
@@ -441,12 +496,11 @@
       </section>
     </div>
 
-    <script type="module">
-      import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
       const supabaseUrl = "https://xkztpyvywqajxbfbgpkb.supabase.co";
       const supabaseKey = "sb_publishable_6x2VmmEGib865Isj7RONLQ_taXk0VwM";
-      const supabase = createClient(supabaseUrl, supabaseKey);
+      const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
       const questions = [
         {
@@ -571,11 +625,14 @@
 
       function renderQuestions() {
         quizForm.innerHTML = "";
+
         questions.forEach((question, index) => {
           const box = document.createElement("div");
           box.className = "question";
+
           const title = document.createElement("h3");
           title.textContent = question.text;
+
           const options = document.createElement("div");
           options.className = "options";
 
@@ -666,7 +723,9 @@
             allAnswered = false;
             return;
           }
-          if (selected.value === question.answer) score += 1;
+          if (selected.value === question.answer) {
+            score += 1;
+          }
         });
 
         if (!allAnswered) {
@@ -732,7 +791,7 @@
             .from("participants")
             .insert([
               {
-                name,
+                name: name,
                 score: 10,
                 prize: randomPrize,
               },
@@ -743,7 +802,7 @@
           }
 
           showMessage(
-            `Баяр хүргэе ${name}! Та 10/10 авч, танд \"${randomPrize}\" оноогдлоо.`,
+            `Баяр хүргэе ${name}! Та 10/10 авч, танд "${randomPrize}" оноогдлоо.`,
             "success",
           );
           quizForm.reset();
@@ -766,8 +825,8 @@
           .on(
             "postgres_changes",
             { event: "*", schema: "public", table: "participants" },
-            async () => {
-              await loadWinners();
+            function () {
+              loadWinners();
             },
           )
           .subscribe();
